@@ -1,0 +1,23 @@
+.usersettings {
+  margin: 1rem 2rem;
+  .usersettings-basics {
+    max-width: 500px;
+    width: 40vw;
+  }
+  .usersettings-changepass {
+    background-color: rgba(135, 207, 235, 0.514);
+    min-width: max-content;
+    width: 40%;
+    margin: 2rem 0;
+    padding: 0.5rem 1rem;
+    .muted {
+      color: grey;
+      font-style: italic;
+    }
+    #link {
+      cursor: pointer;
+      color: dodgerblue;
+      font-weight: 500;
+    }
+  }
+}

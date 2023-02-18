@@ -1,0 +1,31 @@
+.feeScheduleTopbar {
+    // background-color: yellow;
+    display: flex;
+    gap: 20px;
+    .feeScheduleCheckbox{
+        margin: 5px 0;
+    }
+}
+
+.feeScheduleTable{
+    min-width: 35%;
+}
+.fee_schedule_codelist {
+    max-height: 450px;
+    overflow-y: scroll;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+}
+
+.code_list {
+    display: grid;
+    width: 100%;
+    overflow: hidden;
+    height: 500px;
+    grid-template-rows: auto 600px;
+    tr {
+        display: grid;
+        width: 100%;
+        grid-template-columns: 90px 180px 120px 100px 80px 80px 80px;
+    }
+}

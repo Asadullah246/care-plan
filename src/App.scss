@@ -1,0 +1,269 @@
+@import "~antd/dist/antd.css";
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  margin: 0;
+}
+
+.error {
+  font-size: 18px;
+  color: orangered;
+}
+
+main {
+  max-width: 1200px;
+  padding: 1em;
+  margin: 0 auto;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: grid;
+  place-items: center;
+  .close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    color: #fff;
+  }
+}
+
+.search_field {
+  display: flex;
+  align-items: center;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 0.5em 1em;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  gap: 1em;
+  input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+  }
+}
+
+.header nav {
+  margin: auto;
+  max-width: 1200px;
+  position: relative;
+  .main_menu {
+    display: grid;
+    padding: 1em;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    align-items: center;
+    > div {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      svg {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.sub_menu {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 2em;
+  align-items: center;
+  .add_patient {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    cursor: pointer;
+  }
+}
+.patient_list {
+  display: grid;
+  min-height: 80vh;
+  width: 100%;
+  grid-template-rows: auto 1fr auto;
+  grid-gap: 2em;
+  justify-content: space-between;
+  > * {
+    width: 100%;
+  }
+}
+
+.drop_menu {
+  position: absolute;
+  max-width: 300px;
+  padding: 1em;
+  top: 2em;
+  right: 0;
+  > div {
+    display: grid;
+    grid-gap: 1em;
+    padding: 1em;
+    border: 1px solid lightgray;
+    border-radius: 4px;
+    a {
+      text-decoration: none;
+    }
+  }
+}
+
+a,
+a:visited {
+  color: #000;
+}
+
+.care_list {
+  max-width: 600px;
+  padding: 1em;
+  > div {
+    display: grid;
+    grid-template-columns: 1fr 2fr 2fr;
+    grid-gap: 1em;
+    svg {
+      cursor: pointer;
+    }
+    > span {
+      font-weight: 600;
+    }
+    > div {
+      padding: 0.5em;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  }
+}
+
+.care_plan_builder {
+  width: 100%;
+  margin: auto;
+  bottom: 2em;
+  background-color: #fff;
+  min-height: 50vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  > div {
+    border: 1px solid #333;
+    padding: 0.5em;
+  }
+  .menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: space-between;
+  }
+}
+.commonTable {
+  width: 90%;
+  text-align: center;
+}
+
+.logout {
+  border: none;
+  background-color: transparent;
+}
+
+.profile {
+  padding: 1.5em 1em;
+  margin-top: 2em;
+  font-weight: 500;
+  border-bottom: 1px solid #000;
+}
+
+.form {
+  display: grid;
+  grid-gap: 1em;
+}
+
+.inputNumber {
+  width: 90px;
+}
+
+.addmember {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2rem 0;
+}
+
+table td,
+table th {
+  padding: 5px 0.5rem;
+}
+
+.grid-2 {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 150px auto;
+  grid-gap: 1rem;
+  margin: 0.5rem 0;
+}
+
+.care_plan_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  font-size: 14px;
+  max-width: 1280px;
+  padding: 1rem 0.5rem;
+  margin: auto;
+  grid-gap: 0.5rem;
+}
+
+.builder_card {
+  display: grid;
+  grid-template-columns: 1fr 80px 55px;
+  grid-gap: 5px;
+}
+
+.builder_item {
+  display: grid;
+  border-radius: 0.8rem;
+  grid-template-rows: auto auto;
+  grid-gap: 0.5rem;
+  padding: 0.8rem;
+  min-width: 200px;
+  background-color: white;
+  margin: 8px 0;
+  // border: 1px solid black;
+  min-height: 200px;
+  box-shadow: 0px 6px 10px rgba(128, 128, 128, 0.6);
+  justify-content: start;
+}
+
+.builder_header {
+  max-width: 1280px;
+  margin: auto;
+  padding: 1rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 0.5rem;
+}
+
+.borderr {
+  border: 1px solid red;
+}
+
+// .builder_card > div:first-child select {
+//   width: 100%;
+//   border: 1px solid red;
+// }
+
+.flex {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: start;
+}
+
+#texteditor {
+  margin: 2rem;
+  background-color: aliceblue;
+  height: 70vh;
+}

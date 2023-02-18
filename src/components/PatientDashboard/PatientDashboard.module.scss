@@ -1,0 +1,37 @@
+.patientDashboard {
+  padding: 1rem;
+  > div {
+    margin-bottom: 2rem;
+  }
+  input {
+    margin-left: 20px;
+  }
+  .patientdob {
+    margin-left: 10%;
+  }
+  .patientDashTab {
+    width: max-content;
+    position: absolute;
+    max-width: 300px;
+    list-style-type: none;
+    margin-top: 2%;
+    > li {
+      padding: 10px 3px;
+      background-color: rgba(128, 128, 128, 0.5);
+      // border: 2px solid black;
+    }
+    li:nth-child(1),
+    li:nth-child(2) {
+      border-bottom: none;
+    }
+
+    > a {
+      text-decoration: none;
+    }
+  }
+  .patientOutlet {
+    margin-left: 150px;
+    // border-left: 2px solid black;
+    // border-top: 2px solid black;
+  }
+}

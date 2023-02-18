@@ -1,0 +1,20 @@
+.patientTable {
+  width: 100%;
+  text-align: center;
+  tr {
+    width: 100%;
+  }
+  td {
+    text-align: center;
+  }
+  td > div {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
+    padding: 5px;
+  }
+}
+.topsection {
+  margin-left: 10%;
+}

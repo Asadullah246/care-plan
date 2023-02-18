@@ -1,0 +1,18 @@
+.teamTable {
+  width: 100%;
+  td {
+    label {
+      margin: 0 1rem;
+    }
+    .roles {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+.addmember {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 2rem 0;
+}
