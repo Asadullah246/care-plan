@@ -171,7 +171,7 @@ export const latestCalculations = (
     let uncovered = 0;
     let defaultCost = 0;
     let discounted = 0;
-    console.log("itemss", items);
+  
 
     if (!items.length) return { covered, uncovered, defaultCost, discounted };
 
@@ -186,27 +186,29 @@ export const latestCalculations = (
         0;
 
       // discountedAmount
-      const discountedAmount =
-        code?.discountedAmount?.[clientPlan.feeSchedule] ||
-        code?.discountedAmount?.[defaultFS._id] ||
-        0;
+      const discountedAmount = code?.discountedAmount?.[clientPlan.feeSchedule] || amount ; 
 
-        console.log("dd", discountedAmount); 
+        console.log("ddd id", code?.discountedAmount?.[clientPlan.feeSchedule]); 
 
-      discounted =amount -discountedAmount 
+      
 
       const defaultAmount = code?.amount?.[defaultFS?.id] || 0;
       const cost = defaultAmount * item.visits.length;
       defaultCost += cost;
 
+      console.log("ddd id", code?.discountedAmount?.[clientPlan.feeSchedule]);  
+
       item.visits.forEach((vis: number) => {
         if (vis <= insuranceVisits) {
           covered += amount;
+          // discounted += (amount -discountedAmount )
         } else {
           uncovered += amount;
+          discounted += (amount -discountedAmount )
         }
       });
     });
+   
     return { covered, uncovered, defaultCost, discounted };
   };
   const adjustmentCost = getCodeCost2(adjustments, "adjustments");
@@ -214,6 +216,11 @@ export const latestCalculations = (
   const xraysCost = getCodeCost2(xrays, "xrays");
   const therapiesCost = getCodeCost2(therapies, "therapies");
   const addonsCost = getCodeCost2(addOns, "addOns");
+  // console.log("ad dis",adjustmentCost.discounted);
+  // console.log("exam dis",examsCost.discounted);
+  // console.log("exary dis",xraysCost.discounted);
+  // console.log("therapiesCost dis",therapiesCost.discounted);
+  // console.log("addonsCost dis",addonsCost.discounted);
 
   const insuranceCoverage = Number(
     (
@@ -242,7 +249,9 @@ export const latestCalculations = (
       Number(addonsCost.discounted)
     ).toFixed(2)
   );
-  const discountedAmount = userCost - discount;
+  const discountedAmount = Number(userCost - discount).toFixed(2); 
+
+  console.log('discount amount ', discount); 
   const totalCost = insuranceCoverage + userCost;
   const monthlyCost = Number(
     (userCost / clientPlan.carePlan.months).toFixed(2)
