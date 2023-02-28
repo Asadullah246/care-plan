@@ -2,8 +2,8 @@ import axios from "axios";
 import { IInsurance, IUser } from "../types";
 
 // const base = "http://localhost:3305";
-const base = 'https://care-plan-backend.onrender.com';
-
+const base = 'https://care-plan-backend.onrender.com'; 
+ 
 export const registerUser = async (user: IUser) => {
   try {
     const res = await axios.post(`${base}/users/register`, user);

@@ -15,6 +15,7 @@ const TemplateEditor = ({ data, mode }) => {
         setName(e.target.value);
     };
     const handleData = async () => {
+
         // if (tiny == null) return;
         let response;
         if (mode === "edit") {

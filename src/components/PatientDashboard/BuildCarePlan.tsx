@@ -192,7 +192,7 @@ const BuildCarePlan = () => {
       <div style={{ margin: "auto", lineBreak: "loose" }}>
         <span style={{ margin: "1rem", fontWeight: "600" }}>Total Cost of Care Plan ${cost.totalCost}</span>
         <span style={{ margin: "1rem", fontWeight: "600" }}>
-          Total Cost of Care Plan (1x Payment) ${cost.totalCost}
+          Total Cost of Care Plan (1x Payment) ${cost.discountedAmount} 
         </span>
         <span style={{ margin: "1rem", fontWeight: "600" }}>Total Cost of Care Plan (Monthly) ${cost.monthlyCost}</span>
         <span style={{ margin: "1rem", fontWeight: "600" }}>
