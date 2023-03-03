@@ -444,64 +444,79 @@ export const insuranceCalculation = (
 
   console.log("careplan", clientPlan.carePlan);
   for (let i = 1; i <= clientPlan.carePlan.visits; i++) {
-    const adjustmentCost = getCodeCost(
-      clientPlan.carePlan.Adjustments,
-      i,
-      clientPlan.feeSchedule,
-      defaultFS._id,
-      codeList,
-      clientPlan.carePlan.visits,
-      "adjustment"
-    );
-    const examCost = getCodeCost(
-      clientPlan.carePlan.Exams,
-      i,
-      clientPlan.feeSchedule,
-      defaultFS._id,
-      codeList,
-      clientPlan.carePlan.visits,
-      "exam"
-    );
-    const xrayCost = getCodeCost(
-      clientPlan.carePlan.XRays,
-      i,
-      clientPlan.feeSchedule,
-      defaultFS._id,
-      codeList,
-      clientPlan.carePlan.visits,
-      "xrays"
-    );
-    const addonsCost = getCodeCost(
-      clientPlan.carePlan.AddOns,
-      i,
-      clientPlan.feeSchedule,
-      defaultFS._id,
-      codeList,
-      clientPlan.carePlan.visits,
-      "addons"
-    );
-    const therapiesCost = getCodeCost(
-      clientPlan.carePlan.Therapies,
-      i,
-      clientPlan.feeSchedule,
-      defaultFS._id,
-      codeList,
-      clientPlan.carePlan.visits,
-      "therapies"
-    );
-    const currentVisitCost =
+
+ let currentVisitCost=0
+
+    if(insurance.amount_max_per_visit && insurance.amount_max_per_visit > -1 && (insurance.visits_allowed >= i) ){
+      currentVisitCost=insurance.amount_max_per_visit
+    }
+ else {
+  const adjustmentCost = getCodeCost(
+    clientPlan.carePlan.Adjustments,
+    i,
+    clientPlan.feeSchedule,
+    defaultFS._id,
+    codeList,
+    clientPlan.carePlan.visits,
+    "adjustment",
+    insurance
+  );
+  const examCost = getCodeCost(
+    clientPlan.carePlan.Exams,
+    i,
+    clientPlan.feeSchedule,
+    defaultFS._id,
+    codeList,
+    clientPlan.carePlan.visits,
+    "exam",
+    insurance
+  );
+  const xrayCost = getCodeCost(
+    clientPlan.carePlan.XRays,
+    i,
+    clientPlan.feeSchedule,
+    defaultFS._id,
+    codeList,
+    clientPlan.carePlan.visits,
+    "xrays",
+    insurance
+  );
+  const addonsCost = getCodeCost(
+    clientPlan.carePlan.AddOns,
+    i,
+    clientPlan.feeSchedule,
+    defaultFS._id,
+    codeList,
+    clientPlan.carePlan.visits,
+    "addons",
+    insurance
+  );
+  const therapiesCost = getCodeCost(
+    clientPlan.carePlan.Therapies,
+    i,
+    clientPlan.feeSchedule,
+    defaultFS._id,
+    codeList,
+    clientPlan.carePlan.visits,
+    "therapies",
+    insurance
+  );
+
+   currentVisitCost =
       adjustmentCost + addonsCost + examCost + xrayCost + therapiesCost;
 
-    // changed
-
-    console.log("cost",adjustmentCost , addonsCost , examCost , xrayCost , therapiesCost);
-
-    calculations.totalcost +=currentVisitCost;
+    // calculations.totalcost +=currentVisitCost;
 
     if (deductableLeft > calculations.deductableMet + currentVisitCost) {
       calculations.deductableMet += currentVisitCost;
-    } else {
-      if (i <= insuranceVisits) {
+    }
+
+    else {
+      if (insurance.visits_allowed >= i) {
+        // calculation deductableLeft <> insuranceVisits
+
+        // let cost =0
+
         const cost = co_insurance
           ? (currentVisitCost * co_insurance) / 100
           : currentVisitCost;
@@ -511,6 +526,8 @@ export const insuranceCalculation = (
         calculations.userCost += currentVisitCost;
       }
     }
+ }
+
   }
   const defaultFullCost = getDefaultFullCost(
     codeList,
@@ -651,9 +668,9 @@ const getDefaultFullCost = (
 
 // conditions
 
-//   allowed_percentage
-//   amount_max_per_visit
-//   co_insurance
+//   allowed_percentage took .......
+//   amount_max_per_visit -took ......
+//   co_insurance-took.........
 //   exam_co_paystart_meeting_deductable
 // visit_co_pay
 // x_ray_coverage
@@ -666,7 +683,8 @@ const getCodeCost = (
   defaultFS: string,
   codeList: codeStruct[],
   visits:any,
-  itemName:string
+  itemName:string,
+  insurance:any
 ) => {
 
   const cost = Object.values(planItem)
@@ -675,6 +693,7 @@ const getCodeCost = (
         const examDistance=visits / codeItem.visits.length
         if(i%examDistance==0){
           const code = codeList?.find((item) => item.code == codeItem.code);
+
           const amount =
             code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
           return amount;
@@ -712,7 +731,6 @@ const getCodeCost = (
 
       }
      else if (codeItem.visits.includes(i) || itemName=="adjustment") {
-      console.log("adjustment");
         const code = codeList?.find((item) => item.code == codeItem.code);
         const amount =
           code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
