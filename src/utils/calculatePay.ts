@@ -1,5 +1,5 @@
 import store from "../store/store";
-import { codeStruct, ICareplan, IInsurance } from "../types";
+import { adjustment1, codeStruct, ICareplan, IInsurance } from "../types";
 import { Data } from "./interface";
 
 // get covered visits
@@ -418,7 +418,7 @@ export const insuranceCalculation = (
   const deductableLeft =
     insurance.individual_deductable - insurance.individual_deductable_Met;
 
-  const co_insurance = insurance.co_insurance;
+  const co_insurance = insurance.allowed_percentage;
   if (!clientPlan.carePlan)
     return {
       costSummary: {
@@ -451,6 +451,8 @@ export const insuranceCalculation = (
       currentVisitCost=insurance.amount_max_per_visit
     }
  else {
+
+
   const adjustmentCost = getCodeCost(
     clientPlan.carePlan.Adjustments,
     i,
@@ -459,7 +461,8 @@ export const insuranceCalculation = (
     codeList,
     clientPlan.carePlan.visits,
     "adjustment",
-    insurance
+    insurance,
+    calculations.deductableMet
   );
   const examCost = getCodeCost(
     clientPlan.carePlan.Exams,
@@ -469,9 +472,10 @@ export const insuranceCalculation = (
     codeList,
     clientPlan.carePlan.visits,
     "exam",
-    insurance
+    insurance,
+    calculations.deductableMet
   );
-  const xrayCost = getCodeCost(
+  const xrayCost2 = getCodeCost(
     clientPlan.carePlan.XRays,
     i,
     clientPlan.feeSchedule,
@@ -479,7 +483,8 @@ export const insuranceCalculation = (
     codeList,
     clientPlan.carePlan.visits,
     "xrays",
-    insurance
+    insurance,
+    calculations.deductableMet
   );
   const addonsCost = getCodeCost(
     clientPlan.carePlan.AddOns,
@@ -489,7 +494,8 @@ export const insuranceCalculation = (
     codeList,
     clientPlan.carePlan.visits,
     "addons",
-    insurance
+    insurance,
+    calculations.deductableMet
   );
   const therapiesCost = getCodeCost(
     clientPlan.carePlan.Therapies,
@@ -499,8 +505,11 @@ export const insuranceCalculation = (
     codeList,
     clientPlan.carePlan.visits,
     "therapies",
-    insurance
+    insurance,
+    calculations.deductableMet
   );
+
+  const xrayCost=(insurance.x_ray_coverage && (calculations.deductableMet >deductableLeft )) ? (xrayCost2 * insurance.x_ray_coverage) /100 :xrayCost2
 
    currentVisitCost =
       adjustmentCost + addonsCost + examCost + xrayCost + therapiesCost;
@@ -511,14 +520,28 @@ export const insuranceCalculation = (
       calculations.deductableMet += currentVisitCost;
     }
 
-    else {
+
+    else if((deductableLeft < calculations.deductableMet + currentVisitCost) && (deductableLeft < calculations.deductableMet + examCost)){
       if (insurance.visits_allowed >= i) {
         // calculation deductableLeft <> insuranceVisits
 
-        // let cost =0
-
         const cost = co_insurance
           ? (currentVisitCost * co_insurance) / 100
+          : currentVisitCost;
+        calculations.insuranceSavings += currentVisitCost - cost;
+        calculations.userCost += cost;
+        calculations.deductableMet += cost;
+      } else {
+        calculations.userCost += currentVisitCost;
+        calculations.deductableMet += currentVisitCost;
+      }
+    }
+    else if(deductableLeft > calculations.deductableMet + examCost){
+      if (insurance.visits_allowed >= i) {
+        // calculation deductableLeft <> insuranceVisits
+
+        const cost = co_insurance
+          ? (examCost * co_insurance) / 100 + adjustmentCost + addonsCost + xrayCost + therapiesCost
           : currentVisitCost;
         calculations.insuranceSavings += currentVisitCost - cost;
         calculations.userCost += cost;
@@ -526,7 +549,12 @@ export const insuranceCalculation = (
         calculations.userCost += currentVisitCost;
       }
     }
+
+    console.log("cost", adjustmentCost,examCost, xrayCost, addonsCost, therapiesCost );
+    console.log(calculations);
  }
+
+
 
   }
   const defaultFullCost = getDefaultFullCost(
@@ -673,7 +701,7 @@ const getDefaultFullCost = (
 //   co_insurance-took.........
 //   exam_co_paystart_meeting_deductable
 // visit_co_pay
-// x_ray_coverage
+// x_ray_coverage  took ...........
 // x_rays_subject_to_deductable
 
 const getCodeCost = (
@@ -684,7 +712,8 @@ const getCodeCost = (
   codeList: codeStruct[],
   visits:any,
   itemName:string,
-  insurance:any
+  insurance:any,
+  deductableMet:any
 ) => {
 
   const cost = Object.values(planItem)
