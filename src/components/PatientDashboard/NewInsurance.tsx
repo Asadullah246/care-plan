@@ -17,9 +17,11 @@ const NewInsurance = ({ addInsurance, type }: any) => {
     start_meeting_deductable: "yes",
   } as IInsurance);
   const { pid } = useParams();
-  const handleChange = (e: any) => {
+  const handleChange = (e: any) => { 
+    console.log("e is ", e.target.value); 
     const updated = { ...edited, [e.target.name]: e.target.value };
     setEdited(updated);
+    console.log("ed",edited); 
   };
 
   const handleBenefitsType = (e: any) => {
@@ -45,7 +47,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
   
   const updateInsurance = async (e: any) => {
     e.preventDefault();
-    console.log(edited);
+    console.log("editedd",edited);
     setLoading(true);
     const res = await addInsurance(edited, patient._id);
     console.log(res);

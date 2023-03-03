@@ -70,7 +70,9 @@ export const AppContextProvider = ({ children }: any) => {
     setDefaultFS(defaultRes?.data?.schedule);
   };
   const getPatient = async (id: string) => {
+
     const res = await findPatient(id);
+    console.log("res data", res.data); 
     setPatient(res.data.patient);
     return res.data.patient;
   }
@@ -132,7 +134,7 @@ export const AppContextProvider = ({ children }: any) => {
   const handleCost = () => {
     // const costResult = latestCalculations(codeList, clientPlan, defaultFS);
     const costResult = carePlanCalculation(codeList, clientPlan, defaultFS);
-    console.log(costResult, "result");
+    // console.log(costResult, "result");
     setCost(costResult.costSummary);
     setPlaceHolderData(costResult.placeHolderData as Data);
     setCodesBreakdown(costResult.codesBreakdown);

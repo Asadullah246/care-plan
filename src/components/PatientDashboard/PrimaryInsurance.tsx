@@ -13,8 +13,9 @@ export const PrimaryInsurance = ({ data, type }: any) => {
   const loadData = async () => {
     const res = await findInsurance(data);
     // console.log(res)
-    // console.log(res.data.insurance);
+
     if (res.status === 200) {
+      console.log("resData is ", res.data); 
       setInsurance(res.data.insurance);
       // set insurance to store or context
       dispatch(setInsuranceToStore(res.data.insurance))

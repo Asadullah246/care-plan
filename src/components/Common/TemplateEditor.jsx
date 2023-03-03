@@ -9,7 +9,7 @@ const TemplateEditor = ({ data, mode }) => {
     const { gettingTemplateBuilderList, user, codesBreakdown, clientPlan, placeHolderData, patient } = useContext(AppContext);
     const [tiny, setTiny] = useState();
     const [name, setName] = useState('');
-    console.log(codesBreakdown, "codesBreakdown");
+    // console.log(codesBreakdown, "codesBreakdown");
     const editorRef = useRef(null);
     const handleChange = (e) => {
         setName(e.target.value);

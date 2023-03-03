@@ -7,7 +7,7 @@ import { AppContext } from "../states/app.context";
 
 export const Insurance = () => {
   const { patient } = useContext(AppContext);
-  console.log(patient);
+  // console.log(patient);
 
   return (<Row gutter={16}>
     <Col xs={24} sm={24} md={24} lg={12} xl={12}>
