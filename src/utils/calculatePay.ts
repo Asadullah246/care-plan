@@ -183,7 +183,7 @@ export const latestCalculations = (
         0;
 
       // discountedAmount
-      const discountedAmount =
+      discounted +=
         code?.discountedAmount?.[clientPlan.feeSchedule] || amount;
 
       const defaultAmount = code?.amount?.[defaultFS?.id] || 0;
@@ -196,7 +196,7 @@ export const latestCalculations = (
           // discounted += (amount -discountedAmount )
         } else {
           uncovered += amount;
-          discounted += amount - discountedAmount;
+          // discounted += amount - discountedAmount;
         }
       });
     });
@@ -208,11 +208,6 @@ export const latestCalculations = (
   const xraysCost = getCodeCost2(xrays, "xrays");
   const therapiesCost = getCodeCost2(therapies, "therapies");
   const addonsCost = getCodeCost2(addOns, "addOns");
-  // console.log("ad dis",adjustmentCost.discounted);
-  // console.log("exam dis",examsCost.discounted);
-  // console.log("exary dis",xraysCost.discounted);
-  // console.log("therapiesCost dis",therapiesCost.discounted);
-  // console.log("addonsCost dis",addonsCost.discounted);
 
   const insuranceCoverage = Number(
     (
