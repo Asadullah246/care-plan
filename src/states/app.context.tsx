@@ -72,7 +72,7 @@ export const AppContextProvider = ({ children }: any) => {
   const getPatient = async (id: string) => {
 
     const res = await findPatient(id);
-    console.log("res data", res.data); 
+    console.log("res data", res.data);
     setPatient(res.data.patient);
     return res.data.patient;
   }
@@ -135,10 +135,10 @@ export const AppContextProvider = ({ children }: any) => {
     // const costResult = latestCalculations(codeList, clientPlan, defaultFS);
     const costResult = carePlanCalculation(codeList, clientPlan, defaultFS);
     // console.log(costResult, "result");
-    setCost(costResult.costSummary);
-    setPlaceHolderData(costResult.placeHolderData as Data);
-    setCodesBreakdown(costResult.codesBreakdown);
-  };
+    setCost(costResult?.costSummary);
+    setPlaceHolderData(costResult?.placeHolderData as Data);
+    setCodesBreakdown(costResult?.codesBreakdown);
+  }; 
   useEffect(() => {
     handleCost();
   }, [clientPlan, selectedCode]);

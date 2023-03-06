@@ -61,7 +61,7 @@ export interface IInsurance {
   amount_max_per_visit: number | undefined;
   visit_co_pay: number;
   exam_co_pay: number;
-  co_insurance: number;
+  co_insurance: "yes" | "no" | "n/a" | number; 
   x_ray_coverage: "yes" | "no" | "n/a";
   x_ray_percent_coverage: number;
   x_rays_subject_to_deductable: "yes" | "no";

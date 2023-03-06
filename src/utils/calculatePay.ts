@@ -172,13 +172,10 @@ export const latestCalculations = (
     let defaultCost = 0;
     let discounted = 0;
 
-
     if (!items.length) return { covered, uncovered, defaultCost, discounted };
 
     items.forEach((item: any) => {
       const code = codeList?.find((code) => item.code == code.code);
-
-      console.log("new code ", code);
 
       const amount =
         code?.amount?.[clientPlan.feeSchedule] ||
@@ -186,9 +183,8 @@ export const latestCalculations = (
         0;
 
       // discountedAmount
-      const discountedAmount = code?.discountedAmount?.[clientPlan.feeSchedule] || amount ;
-
-      console.log("diss", code?.discountedAmount?.[clientPlan.feeSchedule]);
+      const discountedAmount =
+        code?.discountedAmount?.[clientPlan.feeSchedule] || amount;
 
       const defaultAmount = code?.amount?.[defaultFS?.id] || 0;
       const cost = defaultAmount * item.visits.length;
@@ -200,7 +196,7 @@ export const latestCalculations = (
           // discounted += (amount -discountedAmount )
         } else {
           uncovered += amount;
-          discounted += (amount -discountedAmount )
+          discounted += amount - discountedAmount;
         }
       });
     });
@@ -246,8 +242,6 @@ export const latestCalculations = (
     ).toFixed(2)
   );
   const discountedAmount = Number(userCost - discount).toFixed(2);
-
-  console.log('discount amount ', discount);
   const totalCost = insuranceCoverage + userCost;
   const monthlyCost = Number(
     (userCost / clientPlan.carePlan.months).toFixed(2)
@@ -306,93 +300,12 @@ export const insuranceCalculation = (
   const storeData = store.getState();
   // console.log("store data ", { storeData });
   const insurance = storeData.patient.insurance;
+  if(!(insurance.id)){
+    alert("insurance not found.try to refresh going back")
+    return ;
+  }
   // console.log("patient", storeData.patient);
-  console.log("ins" , insurance);
-
-// insurance states
-
-
-// conditions
-
-//   allowed_percentage
-//   amount_max_per_visit
-//   co_insurance
-//   exam_co_paystart_meeting_deductable
-// visit_co_pay
-// x_ray_coverage
-// x_rays_subject_to_deductable
-
-// others
-
-//   individual_deductable
-//   individual_deductable_Met
-
-//   allowed_percentage
-// :
-// 7
-// amount_max_per_visit
-// :
-// 9
-// benefitsBase
-// :
-// {type: 'Benefit', date: '2022-07-17T14:25:38.047Z'}
-// co_insurance
-// :
-// 1
-// company
-// :
-// "test company"
-// createdAt
-// :
-// "2022-07-17T14:25:58.439Z"
-// effective_date
-// :
-// "2022-07-19T00:00:00.000Z"
-// exam_co_pay
-// :
-// 1
-// expiration_date
-// :
-// "2022-07-27T00:00:00.000Z"
-// family_deductable
-// :
-// 44556
-// family_deductable_Met
-// :
-// 1110
-// id
-// :
-// "62d41bf699494b00161c9c30"
-// individual_deductable
-// :
-// 1223
-// individual_deductable_Met
-// :
-// 124
-// start_meeting_deductable
-// :
-// "yes"
-// updatedAt
-// :
-// "2022-07-17T14:25:58.439Z"
-// visit_co_pay
-// :
-// 2
-// visits_allowed
-// :
-// 3
-// visits_used
-// :
-// 4
-// x_ray_coverage
-// :
-// "no"
-// x_rays_subject_to_deductable
-// :
-// "no"
-// _id
-// :
-// "62d41bf699494b00161c9c30"
+  console.log("ins", insurance);
 
   const placeHolderData: Data = {} as Data;
   // const codesBreakdown: CodeBreakdown = {
@@ -418,7 +331,7 @@ export const insuranceCalculation = (
   const deductableLeft =
     insurance.individual_deductable - insurance.individual_deductable_Met;
 
-  const co_insurance = insurance.allowed_percentage;
+  const co_insurance_persantage = insurance.allowed_percentage;
   if (!clientPlan.carePlan)
     return {
       costSummary: {
@@ -442,120 +355,138 @@ export const insuranceCalculation = (
     totalcost: 0,
   };
 
+
   console.log("careplan", clientPlan.carePlan);
   for (let i = 1; i <= clientPlan.carePlan.visits; i++) {
 
- let currentVisitCost=0
+    let currentVisitCost = 0;
+    let currentVisitSaved = 0;
 
-    if(insurance.amount_max_per_visit && insurance.amount_max_per_visit > -1 && (insurance.visits_allowed >= i) ){
-      currentVisitCost=insurance.amount_max_per_visit
+    const examCost = getCodeCost(
+      clientPlan.carePlan.Exams,
+      i,
+      clientPlan.feeSchedule,
+      defaultFS._id,
+      codeList,
+      clientPlan.carePlan.visits,
+      "exam",
+      insurance,
+      calculations.deductableMet + currentVisitCost
+    );
+    const adjustmentCost = getCodeCost(
+      clientPlan.carePlan.Adjustments,
+      i,
+      clientPlan.feeSchedule,
+      defaultFS._id,
+      codeList,
+      clientPlan.carePlan.visits,
+      "adjustment",
+      insurance,
+      calculations.deductableMet + currentVisitCost
+    );
+
+    const xrayCost = getCodeCost(
+      clientPlan.carePlan.XRays,
+      i,
+      clientPlan.feeSchedule,
+      defaultFS._id,
+      codeList,
+      clientPlan.carePlan.visits,
+      "xrays",
+      insurance,
+      calculations.deductableMet + currentVisitCost
+    );
+    const addonsCost = getCodeCost(
+      clientPlan.carePlan.AddOns,
+      i,
+      clientPlan.feeSchedule,
+      defaultFS._id,
+      codeList,
+      clientPlan.carePlan.visits,
+      "addons",
+      insurance,
+      calculations.deductableMet + currentVisitCost
+    );
+    const therapiesCost = getCodeCost(
+      clientPlan.carePlan.Therapies,
+      i,
+      clientPlan.feeSchedule,
+      defaultFS._id,
+      codeList,
+      clientPlan.carePlan.visits,
+      "therapies",
+      insurance,
+      calculations.deductableMet + currentVisitCost
+    );
+
+    currentVisitCost =
+      adjustmentCost.amount + addonsCost.amount + examCost.amount + xrayCost.amount + therapiesCost.amount;
+      currentVisitSaved =
+      adjustmentCost.saved + addonsCost.saved + examCost.saved + xrayCost.saved + therapiesCost.saved;
+
+
+
+    if (
+      insurance.amount_max_per_visit &&
+      insurance.amount_max_per_visit > 0 &&
+      insurance.visits_allowed >= i &&
+      i < 19
+    ) {
+      if (currentVisitCost > insurance.amount_max_per_visit)
+      currentVisitSaved += currentVisitCost -insurance.amount_max_per_visit
+        currentVisitCost = insurance.amount_max_per_visit;
     }
- else {
+    console.log("curr",currentVisitCost, "svaed",currentVisitSaved);
+    console.log("left",deductableLeft);
 
+    calculations.deductableMet += currentVisitCost
+    console.log("met",calculations.deductableMet);
 
-  const adjustmentCost = getCodeCost(
-    clientPlan.carePlan.Adjustments,
-    i,
-    clientPlan.feeSchedule,
-    defaultFS._id,
-    codeList,
-    clientPlan.carePlan.visits,
-    "adjustment",
-    insurance,
-    calculations.deductableMet
-  );
-  const examCost = getCodeCost(
-    clientPlan.carePlan.Exams,
-    i,
-    clientPlan.feeSchedule,
-    defaultFS._id,
-    codeList,
-    clientPlan.carePlan.visits,
-    "exam",
-    insurance,
-    calculations.deductableMet
-  );
-  const xrayCost2 = getCodeCost(
-    clientPlan.carePlan.XRays,
-    i,
-    clientPlan.feeSchedule,
-    defaultFS._id,
-    codeList,
-    clientPlan.carePlan.visits,
-    "xrays",
-    insurance,
-    calculations.deductableMet
-  );
-  const addonsCost = getCodeCost(
-    clientPlan.carePlan.AddOns,
-    i,
-    clientPlan.feeSchedule,
-    defaultFS._id,
-    codeList,
-    clientPlan.carePlan.visits,
-    "addons",
-    insurance,
-    calculations.deductableMet
-  );
-  const therapiesCost = getCodeCost(
-    clientPlan.carePlan.Therapies,
-    i,
-    clientPlan.feeSchedule,
-    defaultFS._id,
-    codeList,
-    clientPlan.carePlan.visits,
-    "therapies",
-    insurance,
-    calculations.deductableMet
-  );
-
-  const xrayCost=(insurance.x_ray_coverage && (calculations.deductableMet >deductableLeft )) ? (xrayCost2 * insurance.x_ray_coverage) /100 :xrayCost2
-
-   currentVisitCost =
-      adjustmentCost + addonsCost + examCost + xrayCost + therapiesCost;
+    calculations.userCost = calculations.deductableMet - deductableLeft
+    console.log("uercors", calculations.userCost);
+    calculations.insuranceCoverage +=currentVisitSaved
 
     // calculations.totalcost +=currentVisitCost;
 
-    if (deductableLeft > calculations.deductableMet + currentVisitCost) {
-      calculations.deductableMet += currentVisitCost;
-    }
+    // if (deductableLeft > calculations.deductableMet + currentVisitCost) {
+    //   calculations.deductableMet += currentVisitCost;
+    // } else if (
+    //   deductableLeft < calculations.deductableMet + currentVisitCost &&
+    //   deductableLeft < calculations.deductableMet + examCost
+    // ) {
+    //   if (insurance.visits_allowed >= i) {
+    //     // calculation deductableLeft <> insuranceVisits
+
+    //     const cost = co_insurance
+    //       ? (currentVisitCost * co_insurance) / 100
+    //       : currentVisitCost;
+    //     calculations.insuranceSavings += currentVisitCost - cost;
+    //     calculations.userCost += cost;
+    //     calculations.deductableMet += cost;
+    //   } else {
+    //     calculations.userCost += currentVisitCost;
+    //     calculations.deductableMet += currentVisitCost;
+    //   }
+    // } else if (deductableLeft > calculations.deductableMet + examCost) {
+    //   if (insurance.visits_allowed >= i) {
+    //     // calculation deductableLeft <> insuranceVisits
+
+    //     const cost = co_insurance
+    //       ? (examCost * co_insurance) / 100 +
+    //         adjustmentCost +
+    //         addonsCost +
+    //         xrayCost +
+    //         therapiesCost
+    //       : currentVisitCost;
+    //     calculations.insuranceSavings += currentVisitCost - cost;
+    //     calculations.userCost += cost;
+    //   } else {
+    //     calculations.userCost += currentVisitCost;
+    //   }
+    // }
 
 
-    else if((deductableLeft < calculations.deductableMet + currentVisitCost) && (deductableLeft < calculations.deductableMet + examCost)){
-      if (insurance.visits_allowed >= i) {
-        // calculation deductableLeft <> insuranceVisits
-
-        const cost = co_insurance
-          ? (currentVisitCost * co_insurance) / 100
-          : currentVisitCost;
-        calculations.insuranceSavings += currentVisitCost - cost;
-        calculations.userCost += cost;
-        calculations.deductableMet += cost;
-      } else {
-        calculations.userCost += currentVisitCost;
-        calculations.deductableMet += currentVisitCost;
-      }
-    }
-    else if(deductableLeft > calculations.deductableMet + examCost){
-      if (insurance.visits_allowed >= i) {
-        // calculation deductableLeft <> insuranceVisits
-
-        const cost = co_insurance
-          ? (examCost * co_insurance) / 100 + adjustmentCost + addonsCost + xrayCost + therapiesCost
-          : currentVisitCost;
-        calculations.insuranceSavings += currentVisitCost - cost;
-        calculations.userCost += cost;
-      } else {
-        calculations.userCost += currentVisitCost;
-      }
-    }
-
-    console.log("cost", adjustmentCost,examCost, xrayCost, addonsCost, therapiesCost );
     console.log(calculations);
- }
-
-
-
   }
   const defaultFullCost = getDefaultFullCost(
     codeList,
@@ -624,8 +555,8 @@ export const insuranceCalculation = (
     costSummary: {
       userCost: reducedNumberToFixed(calculations.userCost),
       totalCost: calculations.totalcost,
-      insuranceCoverage: reducedNumberToFixed(calculations.deductableMet),
-      insuranceSavings: reducedNumberToFixed(calculations.insuranceSavings),
+      insuranceCoverage: reducedNumberToFixed(calculations.insuranceCoverage),
+      insuranceSavings: reducedNumberToFixed(calculations.insuranceCoverage),
       monthlyCost: reducedNumberToFixed(
         calculations.userCost / clientPlan.carePlan.months
       ),
@@ -696,13 +627,13 @@ const getDefaultFullCost = (
 
 // conditions
 
-//   allowed_percentage took .......
-//   amount_max_per_visit -took ......
-//   co_insurance-took.........
-//   exam_co_paystart_meeting_deductable
-// visit_co_pay
-// x_ray_coverage  took ...........
-// x_rays_subject_to_deductable
+//   allowed_percentage ----done
+//   amount_max_per_visit -
+//   co_insurance-
+//   exam_co_pay--------done
+// visit_co_pay----------- done
+// x_ray_coverage ----------done
+// x_rays_subject_to_deductable ---bad dilam
 
 const getCodeCost = (
   planItem: any,
@@ -710,65 +641,208 @@ const getCodeCost = (
   feeSchedule: string,
   defaultFS: string,
   codeList: codeStruct[],
-  visits:any,
-  itemName:string,
-  insurance:any,
-  deductableMet:any
+  visits: any,
+  itemName: string,
+  insurance: any,
+  deductableMet: number
 ) => {
+  const deductableLeft =
+    Number(insurance.individual_deductable) - Number(insurance.individual_deductable_Met);
 
-  const cost = Object.values(planItem)
-    .map((codeItem: any) => {
-      if(itemName=="exam"){
-        const examDistance=visits / codeItem.visits.length
-        if(i%examDistance==0){
-          const code = codeList?.find((item) => item.code == codeItem.code);
-
-          const amount =
-            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
-          return amount;
-        }
-
-      }
-     else if(itemName=="xrays"){
-
-        if(i == visits){
-          const code = codeList?.find((item) => item.code == codeItem.code);
-          const amount =
-            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
-          return amount;
-        }
-
-      }
-     else if(itemName=="addons"){
-
-        if(i == visits){
-          const code = codeList?.find((item) => item.code == codeItem.code);
-          const amount =
-            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
-          return amount;
-        }
-
-      }
-     else if(itemName=="therapies"){
-
-        if(i == visits){
-          const code = codeList?.find((item) => item.code == codeItem.code);
-          const amount =
-            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
-          return amount;
-        }
-
-      }
-     else if (codeItem.visits.includes(i) || itemName=="adjustment") {
+  const cost2 = Object.values(planItem).map((codeItem: any) => {
+    if (itemName == "exam") {
+      const examDistance = visits / codeItem.visits.length;
+      if (i % examDistance == 0) {
         const code = codeList?.find((item) => item.code == codeItem.code);
+        const mainAmount =
+          code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+
+        if (insurance?.exam_co_pay >= 0) {
+          const amount = insurance.exam_co_pay;
+
+          const saved = Number(mainAmount)-Number(amount);
+          if(!isNaN(saved)){
+            return {amount, saved}
+          }
+
+        } else if (
+          insurance.co_insurance === "yes" &&
+          deductableMet >= deductableLeft
+        ) {
+          const totalAmount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          const amount = (totalAmount * insurance.allowed_percentage) / 100;
+
+          const saved = Number(mainAmount)-Number(amount);
+          if(!isNaN(saved)){
+            return {amount, saved}
+          }
+
+        } else {
+          const amount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          const saved = Number(mainAmount)-Number(amount);
+          if(!isNaN(saved)){
+            return {amount, saved}
+          }
+
+        }
+      }
+    } else if (itemName == "xrays") {
+      if (i == visits) {
+        const code = codeList?.find((item) => item.code == codeItem.code);
+        const mainAmount =
+          code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+        if (insurance?.x_ray_coverage === "yes") {
+          const totalAmount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+
+          const amount =
+            totalAmount -
+            (totalAmount * insurance.x_ray_percent_coverage) / 100;
+          const saved = Number(mainAmount)-Number(amount);
+          if(!isNaN(saved)){
+            return {amount, saved}
+          }
+
+        } else if (
+          insurance.co_insurance === "yes" &&
+          deductableMet >= deductableLeft
+        ) {
+          const totalAmount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          const amount = (totalAmount * insurance.allowed_percentage) / 100;
+          const saved = Number(mainAmount)-Number(amount);
+          if(!isNaN(saved)){
+            return {amount, saved}
+          }
+
+        } else {
+          const amount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          const saved = Number(mainAmount)-Number(amount);
+          if(!isNaN(saved)){
+            return {amount, saved}
+          }
+
+        }
+      }
+    } else if (itemName == "addons") {
+      if (i == visits) {
+        const code = codeList?.find((item) => item.code == codeItem.code);
+        const mainAmount =
+          code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+        if (
+          insurance.co_insurance === "yes" &&
+          deductableMet >= deductableLeft
+        ) {
+          const totalAmount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+
+          const amount = (totalAmount * insurance.allowed_percentage) / 100;
+          const saved = Number(mainAmount)-Number(amount);
+          if(!isNaN(saved)){
+            return {amount, saved}
+          }
+
+        } else {
+          const amount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          const saved = Number(mainAmount)-Number(amount);
+          if(!isNaN(saved)){
+            return {amount, saved}
+          }
+
+        }
+      }
+    } else if (itemName == "therapies") {
+      if (i == visits) {
+        const code = codeList?.find((item) => item.code == codeItem.code);
+        const mainAmount =
+          code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+        if (
+          insurance.co_insurance === "yes" &&
+          deductableMet >= deductableLeft
+        ) {
+          const totalAmount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          const amount = (totalAmount * insurance.allowed_percentage) / 100;
+          const saved = Number(mainAmount)-Number(amount);
+          if(!isNaN(saved)){
+            return {amount, saved}
+          }
+
+        } else {
+          const amount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          const saved = Number(mainAmount)-Number(amount);
+          if(!isNaN(saved)){
+            return {amount, saved}
+          }
+
+        }
+      }
+    } else if (codeItem.visits.includes(i) || itemName == "adjustment") {
+      const code = codeList?.find((item) => item.code == codeItem.code);
+      const mainAmount =
+        code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+      if (insurance.visit_co_pay >= 0 && i <= visits) {
+        const amount = insurance.visit_co_pay;
+        const saved = Number(mainAmount)-Number(amount);
+        if(!isNaN(saved)){
+          return {amount, saved}
+        }
+
+      } else if (
+        insurance.co_insurance === "yes" &&
+        i <= visits &&
+        deductableMet >= deductableLeft
+      ) {
+        const totalAmount =
+          code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+        const amount = (totalAmount * insurance.allowed_percentage) / 100;
+        const saved = Number(mainAmount)-Number(amount);
+        if(!isNaN(saved)){
+          return {amount, saved}
+        }
+
+      } else {
         const amount =
           code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
-        return amount;
+
+        const saved = Number(mainAmount)-Number(amount);
+        if(!isNaN(saved)){
+          return {amount, saved}
+        }
+
       }
-      return 0;
-    })
-    .reduce((total, current) => total + current, 0);
-  return cost;
+    }
+    return 0;
+  });
+  // .reduce((total, current) => total + current, 0);
+type Consttype = {
+  amount: number,
+  saved: number
+};
+  const result:Consttype = { amount: 0, saved: 0 };
+  cost2.forEach((obj:any) => {
+
+    result.amount += Number(obj.amount);
+    result.saved += Number(obj.saved);
+  });
+
+  if( result.amount >=0 || result.amount >=0){
+    return result;
+
+  }
+  else {
+    return {
+      amount:0, saved:0
+    }
+  }
+
+
+
 };
 
 export const reducedNumberToFixed = (num: number, fix = 2) => {

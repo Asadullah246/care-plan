@@ -10,6 +10,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
   const [loading, setLoading] = useState(false);
   const [edited, setEdited] = useState<IInsurance>({
     x_ray_coverage: "no",
+    co_insurance: "yes",
     benefitsBase: {
       type: "Calendar",
       date: new Date(new Date().getFullYear(), 0, 1),
@@ -17,11 +18,12 @@ const NewInsurance = ({ addInsurance, type }: any) => {
     start_meeting_deductable: "yes",
   } as IInsurance);
   const { pid } = useParams();
-  const handleChange = (e: any) => { 
-    console.log("e is ", e.target.value); 
+
+  const handleChange = (e: any) => {
+    console.log("e is ",e.target.name, e.target.value);
     const updated = { ...edited, [e.target.name]: e.target.value };
     setEdited(updated);
-    console.log("ed",edited); 
+    console.log("ed",updated);
   };
 
   const handleBenefitsType = (e: any) => {
@@ -44,7 +46,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
   const handleBenefitsDate = (e: any) => {
     console.log(e.target.value);
   };
-  
+
   const updateInsurance = async (e: any) => {
     e.preventDefault();
     console.log("editedd",edited);
@@ -61,7 +63,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
   useEffect(() => {
     getPatient(pid);
   }, [])
-  
+
   return (
     <form onSubmit={updateInsurance}>
       <Title level={3}>Add {type}</Title>
@@ -266,25 +268,52 @@ const NewInsurance = ({ addInsurance, type }: any) => {
           <tr>
             <td>Visit Co Pay</td>
             <td>
-              <select name="visit_co_pay" defaultValue={"no"} id="visit_co_pay">
+              <Input
+                type="number"
+                min={0}
+                onChange={handleChange}
+                defaultValue={edited?.visit_co_pay}
+                name="visit_co_pay"
+                id="visit_co_pay"
+              />
+            </td>
+            {/* <td>
+              <select
+               name="visit_co_pay"
+               onChange={handleChange}
+               defaultValue={edited?.visit_co_pay}
+                // defaultValue={"no"} id="visit_co_pay"
+                >
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
-            </td>
+            </td> */}
           </tr>
+
+
           <tr>
             <td>Exam Co Pay</td>
             <td>
+              <Input
+                type="number"
+                min={0}
+                onChange={handleChange}
+                defaultValue={edited?.visit_co_pay}
+                name="exam_co_pay"
+                id="exam_co_pay"
+              />
+            </td>
+            {/* <td>
               <select name="exam_co_pay" defaultValue={"no"} id="exam_co_pay">
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
-            </td>
+            </td> */}
           </tr>
           <tr>
             <td>Co - Insurance</td>
             <td>
-              <select name="co_insurance" defaultValue={"no"} id="co_insurance">
+              <select name="co_insurance" onChange={handleChange}  id="co_insurance">
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
@@ -313,6 +342,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
               <td>
                 <Input
                   min={0}
+                  onChange={handleChange}
                   defaultValue={edited?.x_ray_percent_coverage}
                   type="number"
                   name="x_ray_percent_coverage"
