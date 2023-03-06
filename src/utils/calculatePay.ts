@@ -300,6 +300,7 @@ export const insuranceCalculation = (
   const storeData = store.getState();
   // console.log("store data ", { storeData });
   const insurance = storeData.patient.insurance;
+  console.log("client plan", clientPlan)
   if(!(insurance.id)){
     alert("insurance not found.try to refresh going back")
     return ;
@@ -418,13 +419,13 @@ export const insuranceCalculation = (
       insurance,
       calculations.deductableMet + currentVisitCost
     );
-
+console.log("result", examCost, adjustmentCost, xrayCost, addonsCost, therapiesCost);
     currentVisitCost =
       adjustmentCost.amount + addonsCost.amount + examCost.amount + xrayCost.amount + therapiesCost.amount;
       currentVisitSaved =
       adjustmentCost.saved + addonsCost.saved + examCost.saved + xrayCost.saved + therapiesCost.saved;
 
-
+      console.log("curr",currentVisitCost, "svaed",currentVisitSaved);
 
     if (
       insurance.amount_max_per_visit &&
@@ -432,11 +433,11 @@ export const insuranceCalculation = (
       insurance.visits_allowed >= i &&
       i < 19
     ) {
-      if (currentVisitCost > insurance.amount_max_per_visit)
+      if (currentVisitCost > Number(insurance.amount_max_per_visit))
       currentVisitSaved += currentVisitCost -insurance.amount_max_per_visit
         currentVisitCost = insurance.amount_max_per_visit;
     }
-    console.log("curr",currentVisitCost, "svaed",currentVisitSaved);
+
     console.log("left",deductableLeft);
 
     calculations.deductableMet += currentVisitCost
@@ -445,46 +446,6 @@ export const insuranceCalculation = (
     calculations.userCost = calculations.deductableMet - deductableLeft
     console.log("uercors", calculations.userCost);
     calculations.insuranceCoverage +=currentVisitSaved
-
-    // calculations.totalcost +=currentVisitCost;
-
-    // if (deductableLeft > calculations.deductableMet + currentVisitCost) {
-    //   calculations.deductableMet += currentVisitCost;
-    // } else if (
-    //   deductableLeft < calculations.deductableMet + currentVisitCost &&
-    //   deductableLeft < calculations.deductableMet + examCost
-    // ) {
-    //   if (insurance.visits_allowed >= i) {
-    //     // calculation deductableLeft <> insuranceVisits
-
-    //     const cost = co_insurance
-    //       ? (currentVisitCost * co_insurance) / 100
-    //       : currentVisitCost;
-    //     calculations.insuranceSavings += currentVisitCost - cost;
-    //     calculations.userCost += cost;
-    //     calculations.deductableMet += cost;
-    //   } else {
-    //     calculations.userCost += currentVisitCost;
-    //     calculations.deductableMet += currentVisitCost;
-    //   }
-    // } else if (deductableLeft > calculations.deductableMet + examCost) {
-    //   if (insurance.visits_allowed >= i) {
-    //     // calculation deductableLeft <> insuranceVisits
-
-    //     const cost = co_insurance
-    //       ? (examCost * co_insurance) / 100 +
-    //         adjustmentCost +
-    //         addonsCost +
-    //         xrayCost +
-    //         therapiesCost
-    //       : currentVisitCost;
-    //     calculations.insuranceSavings += currentVisitCost - cost;
-    //     calculations.userCost += cost;
-    //   } else {
-    //     calculations.userCost += currentVisitCost;
-    //   }
-    // }
-
 
     console.log(calculations);
   }
@@ -625,15 +586,6 @@ const getDefaultFullCost = (
   return xraysCost + addonsCost + therapyCost + examsCost + adjustmentCost;
 };
 
-// conditions
-
-//   allowed_percentage ----done
-//   amount_max_per_visit -
-//   co_insurance-
-//   exam_co_pay--------done
-// visit_co_pay----------- done
-// x_ray_coverage ----------done
-// x_rays_subject_to_deductable ---bad dilam
 
 const getCodeCost = (
   planItem: any,
@@ -646,11 +598,12 @@ const getCodeCost = (
   insurance: any,
   deductableMet: number
 ) => {
+  // console.log(feeSchedule, defaultFS,insurance);
   const deductableLeft =
     Number(insurance.individual_deductable) - Number(insurance.individual_deductable_Met);
   const visit =
     Number(insurance.visits_allowed) - Number(insurance.visits_used);
-
+console.log(deductableLeft, "met", deductableMet);
   const cost2 = Object.values(planItem).map((codeItem: any) => {
     if (itemName == "exam") {
       const examDistance = visits / codeItem.visits.length;
@@ -658,8 +611,9 @@ const getCodeCost = (
         const code = codeList?.find((item) => item.code == codeItem.code);
         const mainAmount =
           code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          console.log("exam fee", mainAmount);
 
-        if (insurance?.exam_co_pay >= 0) {
+        if (insurance?.exam_co_pay !=null && insurance?.exam_co_pay >= 0) {
           const amount = insurance.exam_co_pay;
 
           const saved = Number(mainAmount)-Number(amount);
@@ -698,7 +652,7 @@ const getCodeCost = (
         if (insurance?.x_ray_coverage === "yes") {
           const totalAmount =
             code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
-
+            console.log("xrays fee", mainAmount);
           const amount =
             totalAmount -
             (totalAmount * insurance.x_ray_percent_coverage) / 100;
@@ -717,6 +671,7 @@ const getCodeCost = (
           const totalAmount =
             code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
           const amount = (totalAmount * insurance.allowed_percentage) / 100;
+          console.log("xrays cover", amount);
           const saved = Number(mainAmount)-Number(amount);
           if(!isNaN(saved)){
             return {amount, saved}
@@ -730,6 +685,7 @@ const getCodeCost = (
             code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
           const saved = Number(mainAmount)-Number(amount);
           if(!isNaN(saved)){
+
             return {amount, saved}
           }
 
@@ -746,7 +702,7 @@ const getCodeCost = (
         ) {
           const totalAmount =
             code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
-
+            console.log("add onam fee", mainAmount);
           const amount = (totalAmount * insurance.allowed_percentage) / 100;
           const saved = Number(mainAmount)-Number(amount);
           if(!isNaN(saved)){
@@ -780,6 +736,8 @@ const getCodeCost = (
         ) {
           const totalAmount =
             code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+
+            console.log("therapy fee", mainAmount);
           const amount = (totalAmount * insurance.allowed_percentage) / 100;
           const saved = Number(mainAmount)-Number(amount);
           if(!isNaN(saved)){
@@ -802,22 +760,26 @@ const getCodeCost = (
 
         }
       }
-    } else if (codeItem.visits.includes(i) || itemName == "adjustment") {
+    } else if (itemName == "adjustment") {
       const code = codeList?.find((item) => item.code == codeItem.code);
       const mainAmount =
         code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
-      if (insurance.visit_co_pay >= 0 && i <= visit) {
+        console.log("adjustament fee", mainAmount);
+      if (insurance.visit_co_pay != null && insurance.visit_co_pay >= 0 && i <= visit) {
+        console.log("first conditon");
         const amount = insurance.visit_co_pay;
         const saved = Number(mainAmount)-Number(amount);
         if(!isNaN(saved)){
           return {amount, saved}
         }
 
-      } else if (
-        insurance.co_insurance === "yes" &&
-        i <= visit &&
-        deductableMet >= deductableLeft
+      }
+      else if (
+        (insurance.co_insurance === "yes" )&&
+        (i <= visit) &&
+        (deductableMet >= deductableLeft)
       ) {
+        console.log("entered");
         const totalAmount =
           code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
         const amount = (totalAmount * insurance.allowed_percentage) / 100;
@@ -826,12 +788,15 @@ const getCodeCost = (
           return {amount, saved}
         }
 
-      } else {
+      }
+      else {
+        console.log("others");
         const amount =
           code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
 
         const saved = Number(mainAmount)-Number(amount);
         if(!isNaN(saved)){
+          console.log("valu", amount, saved);
           return {amount, saved}
         }
 
