@@ -11,22 +11,25 @@ export const PrimaryInsurance = ({ data, type }: any) => {
   const dispatch = useDispatch();
 
   const loadData = async () => {
-    const res = await findInsurance(data);
-    // console.log(res)
+    if(type=="Primary Insurance"){
+      const res = await findInsurance(data);
+      
+      if (res.status === 200) {
+        console.log("resData is ", res.data);
+        setInsurance(res.data.insurance);
+        // set insurance to store or context
+        dispatch(setInsuranceToStore(res.data.insurance))
+        // console.log(res.data.insurance);
+      }
+      else {
+        notification["error"]({
+          message: "Something went wrong!",
+          description: ""
+        })
+      }
+    }
 
-    if (res.status === 200) {
-      console.log("resData is ", res.data); 
-      setInsurance(res.data.insurance);
-      // set insurance to store or context
-      dispatch(setInsuranceToStore(res.data.insurance))
-      // console.log(res.data.insurance);
-    }
-    else {
-      notification["error"]({
-        message: "Something went wrong!",
-        description: ""
-      })
-    }
+
 setLoading(false);
   }
   useEffect(() => {
