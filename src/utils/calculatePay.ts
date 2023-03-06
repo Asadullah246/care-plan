@@ -648,6 +648,8 @@ const getCodeCost = (
 ) => {
   const deductableLeft =
     Number(insurance.individual_deductable) - Number(insurance.individual_deductable_Met);
+  const visit =
+    Number(insurance.visits_allowed) - Number(insurance.visits_used);
 
   const cost2 = Object.values(planItem).map((codeItem: any) => {
     if (itemName == "exam") {
@@ -704,6 +706,9 @@ const getCodeCost = (
           if(!isNaN(saved)){
             return {amount, saved}
           }
+          else{
+            return{amount:0, saved:0}
+          }
 
         } else if (
           insurance.co_insurance === "yes" &&
@@ -715,6 +720,9 @@ const getCodeCost = (
           const saved = Number(mainAmount)-Number(amount);
           if(!isNaN(saved)){
             return {amount, saved}
+          }
+          else{
+            return{amount:0, saved:0}
           }
 
         } else {
@@ -744,6 +752,9 @@ const getCodeCost = (
           if(!isNaN(saved)){
             return {amount, saved}
           }
+          else{
+            return{amount:0, saved:0}
+          }
 
         } else {
           const amount =
@@ -751,6 +762,9 @@ const getCodeCost = (
           const saved = Number(mainAmount)-Number(amount);
           if(!isNaN(saved)){
             return {amount, saved}
+          }
+          else{
+            return{amount:0, saved:0}
           }
 
         }
@@ -771,6 +785,9 @@ const getCodeCost = (
           if(!isNaN(saved)){
             return {amount, saved}
           }
+          else{
+            return{amount:0, saved:0}
+          }
 
         } else {
           const amount =
@@ -779,6 +796,9 @@ const getCodeCost = (
           if(!isNaN(saved)){
             return {amount, saved}
           }
+          else{
+            return{amount:0, saved:0}
+          }
 
         }
       }
@@ -786,7 +806,7 @@ const getCodeCost = (
       const code = codeList?.find((item) => item.code == codeItem.code);
       const mainAmount =
         code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
-      if (insurance.visit_co_pay >= 0 && i <= visits) {
+      if (insurance.visit_co_pay >= 0 && i <= visit) {
         const amount = insurance.visit_co_pay;
         const saved = Number(mainAmount)-Number(amount);
         if(!isNaN(saved)){
@@ -795,7 +815,7 @@ const getCodeCost = (
 
       } else if (
         insurance.co_insurance === "yes" &&
-        i <= visits &&
+        i <= visit &&
         deductableMet >= deductableLeft
       ) {
         const totalAmount =

@@ -1,8 +1,9 @@
 import axios from "axios";
 import { IInsurance, IUser } from "../types";
 
-const base = "http://localhost:3305";
-// const base = 'https://care-plan-backend.onrender.com'; 
+// const base = "http://localhost:3305";
+const base = 'https://careplanproject.onrender.com'; 
+
 
 export const registerUser = async (user: IUser) => {
   try {
