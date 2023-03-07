@@ -183,12 +183,12 @@ export const latestCalculations = (
         0;
 
       // discountedAmount
-      discounted +=
+     const  discounteded =
         code?.discountedAmount?.[clientPlan.feeSchedule] || amount;
 
       const defaultAmount = code?.amount?.[defaultFS?.id] || 0;
-      const cost = defaultAmount * item.visits.length;
-      defaultCost += cost;
+      const dcost = defaultAmount * item.visits.length;
+      defaultCost += dcost;
 
       item.visits.forEach((vis: number) => {
         if (vis <= insuranceVisits) {
@@ -196,12 +196,11 @@ export const latestCalculations = (
           // discounted += (amount -discountedAmount )
         } else {
           uncovered += amount;
-          // discounted += amount - discountedAmount;
+          discounted += discounteded;
         }
       });
     });
-
-    return { covered, uncovered, defaultCost, discounted };
+return { covered, uncovered, defaultCost, discounted };
   };
   const adjustmentCost = getCodeCost2(adjustments, "adjustments");
   const examsCost = getCodeCost2(exams, "exams");
@@ -236,7 +235,7 @@ export const latestCalculations = (
       Number(addonsCost.discounted)
     ).toFixed(2)
   );
-  const discountedAmount = Number(userCost - discount).toFixed(2);
+  const discountedAmount = Number(discount)
   const totalCost = insuranceCoverage + userCost;
   const monthlyCost = Number(
     (userCost / clientPlan.carePlan.months).toFixed(2)
@@ -262,8 +261,8 @@ export const latestCalculations = (
   placeHolderData["{stageOfCare}"] = clientPlan.stageOfCare;
   placeHolderData["{totalDefaultFeeSchedulePrice}"] = defaultFeeScheduleCost;
   placeHolderData["{totalCareplanPrice}"] = totalCost;
-  placeHolderData["{outOfPocket}"] = userCost || 0;
-  placeHolderData["{insuranceCoverage}"] = insuranceCoverage;
+  placeHolderData["{outOfPocket}"] = discountedAmount || userCost;
+  placeHolderData["{insuranceCoverage}"] = insuranceCoverage; 
   placeHolderData["{monthlyPrice}"] = monthlyCost;
   // placeHolderData["{patientName}"] = 'john doe';
   placeHolderData["{phaseOfDegeneration}"] = clientPlan.phaseOfDegenration;
@@ -278,6 +277,12 @@ export const latestCalculations = (
     defaultFeeScheduleCost,
     discountedAmount,
   };
+  console.log("L", totalCost,
+  insuranceCoverage,
+  userCost,
+  monthlyCost,
+  defaultFeeScheduleCost,
+  discountedAmount,);
   return { costSummary, placeHolderData, codesBreakdown };
 };
 
@@ -347,7 +352,6 @@ export const insuranceCalculation = (
     insuranceCoverage: 0,
     insuranceSavings: 0,
     userCost: 0,
-    // changed
     totalcost: 0,
   };
 
@@ -369,6 +373,8 @@ export const insuranceCalculation = (
       insurance,
       calculations.deductableMet + currentVisitCost
     );
+    currentVisitCost +=examCost.amount
+    currentVisitSaved +=examCost.saved
     const adjustmentCost = getCodeCost(
       clientPlan.carePlan.Adjustments,
       i,
@@ -380,6 +386,8 @@ export const insuranceCalculation = (
       insurance,
       calculations.deductableMet + currentVisitCost
     );
+    currentVisitCost +=adjustmentCost.amount
+    currentVisitSaved +=adjustmentCost.saved
 
     const xrayCost = getCodeCost(
       clientPlan.carePlan.XRays,
@@ -392,6 +400,8 @@ export const insuranceCalculation = (
       insurance,
       calculations.deductableMet + currentVisitCost
     );
+    currentVisitCost +=xrayCost.amount
+    currentVisitSaved +=xrayCost.saved
     const addonsCost = getCodeCost(
       clientPlan.carePlan.AddOns,
       i,
@@ -403,6 +413,8 @@ export const insuranceCalculation = (
       insurance,
       calculations.deductableMet + currentVisitCost
     );
+    currentVisitCost +=addonsCost.amount
+    currentVisitSaved +=addonsCost.saved
     const therapiesCost = getCodeCost(
       clientPlan.carePlan.Therapies,
       i,
@@ -414,11 +426,14 @@ export const insuranceCalculation = (
       insurance,
       calculations.deductableMet + currentVisitCost
     );
-console.log("result", examCost, adjustmentCost, xrayCost, addonsCost, therapiesCost);
-    currentVisitCost =
-      adjustmentCost.amount + addonsCost.amount + examCost.amount + xrayCost.amount + therapiesCost.amount;
-      currentVisitSaved =
-      adjustmentCost.saved + addonsCost.saved + examCost.saved + xrayCost.saved + therapiesCost.saved;
+    currentVisitCost +=therapiesCost.amount
+    currentVisitSaved +=therapiesCost.saved
+
+// console.log("result", examCost, adjustmentCost, xrayCost, addonsCost, therapiesCost);
+//     currentVisitCost =
+//       adjustmentCost.amount + addonsCost.amount + examCost.amount + xrayCost.amount + therapiesCost.amount;
+//       currentVisitSaved =
+//       adjustmentCost.saved + addonsCost.saved + examCost.saved + xrayCost.saved + therapiesCost.saved;
 
       console.log("curr",currentVisitCost, "svaed",currentVisitSaved);
 
@@ -438,8 +453,11 @@ console.log("result", examCost, adjustmentCost, xrayCost, addonsCost, therapiesC
     calculations.deductableMet += currentVisitCost
     console.log("met",calculations.deductableMet);
 
-    calculations.userCost = calculations.deductableMet - deductableLeft
+    calculations.userCost = ((calculations.deductableMet - deductableLeft) >0)? calculations.deductableMet - deductableLeft :0
+    calculations.totalcost += currentVisitSaved+currentVisitCost ;
+
     console.log("uercors", calculations.userCost);
+
     calculations.insuranceCoverage +=currentVisitSaved
 
     console.log(calculations);
@@ -522,6 +540,7 @@ console.log("result", examCost, adjustmentCost, xrayCost, addonsCost, therapiesC
     codesBreakdown,
   };
 };
+
 
 const getDefaultCodeAmount = (
   codeList: codeStruct[],
@@ -608,7 +627,7 @@ console.log(deductableLeft, "met", deductableMet);
           code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
           console.log("exam fee", mainAmount);
 
-        if (insurance?.exam_co_pay !=null && insurance?.exam_co_pay >= 0) {
+        if (insurance?.exam_co_pay !=null && insurance?.exam_co_pay >= 0 && i<=visit) {
           const amount = insurance.exam_co_pay;
 
           const saved = Number(mainAmount)-Number(amount);

@@ -129,7 +129,7 @@ const BuildCarePlan = () => {
               onChange={(e) => {
                 setFeeSchedule(e);
                 console.log("e",e);
-                handleClientPlan("feeSchedule", e); 
+                handleClientPlan("feeSchedule", e);
               }}
               value={clientPlan.feeSchedule}
             >
@@ -193,7 +193,7 @@ const BuildCarePlan = () => {
       <div style={{ margin: "auto", lineBreak: "loose" }}>
         <span style={{ margin: "1rem", fontWeight: "600" }}>Total Cost of Care Plan ${cost.totalCost}</span>
         <span style={{ margin: "1rem", fontWeight: "600" }}>
-          Total Cost of Care Plan (1x Payment) ${cost.discountedAmount}
+          Total Cost of Care Plan (1x Payment) ${((cost.discountedAmount) != null && (cost.discountedAmount) >0) ?cost.discountedAmount : cost.userCost} 
         </span>
         <span style={{ margin: "1rem", fontWeight: "600" }}>Total Cost of Care Plan (Monthly) ${cost.monthlyCost}</span>
         <span style={{ margin: "1rem", fontWeight: "600" }}>
