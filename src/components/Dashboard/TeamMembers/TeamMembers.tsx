@@ -64,8 +64,8 @@ const TeamMembers = () => {
   };
 
   return (
-    <div>
-      <h2>Total members: {members.length}</h2>
+    <div className="team_member_page1">
+      <h2 className="team_member_title1">Total members: {members.length}</h2>
       {isAdmin && (
         <Button type="primary" className={styles.addmember} onClick={showModal}>
           <FaPlusCircle /> Add Team Member

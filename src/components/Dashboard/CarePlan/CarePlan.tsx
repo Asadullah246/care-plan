@@ -20,7 +20,7 @@ export const CarePlan = () => {
 
   return (
     <main>
-      <h2>Care Plan builder</h2>
+      <h2 className="care_plan_title1">Care Plan builder</h2> 
       <NewCarePlanTemplate load={getCarePlans} />
       {
         carePlanTypeList ? (<div className="care_list">

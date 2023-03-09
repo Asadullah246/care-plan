@@ -17,8 +17,8 @@ const FeeSchedule = () => {
     getSchedules();
   }, []);
   return (
-    <div>
-      <h2>Total Schedules: {schedules.length}</h2>
+    <div className="free_schedule_page1">
+      <h2 className="free_schedule1">Total Schedules: {schedules.length}</h2>
       <AddSchedule fslist = {getSchedules} />
       {schedules.length !== 0 ? (
         <table className={styles.feeScheduleTable}>

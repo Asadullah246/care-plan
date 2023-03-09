@@ -92,9 +92,7 @@ main {
   grid-template-rows: auto 1fr auto;
   grid-gap: 2em;
   justify-content: space-between;
-  > * {
-    width: 100%;
-  }
+
 }
 
 .drop_menu {
@@ -267,3 +265,207 @@ table th {
   background-color: aliceblue;
   height: 70vh;
 }
+
+
+// new updated style
+
+// Layout
+
+//Left side menu background color
+
+.ant-menu-root.ant-menu-vertical, .ant-menu-root.ant-menu-vertical-left, .ant-menu-root.ant-menu-vertical-right, .ant-menu-root.ant-menu-inline {
+  background-color: #4E5180;
+}
+
+.ant-layout-sider-children {
+  background-color: #4E5180;
+}
+
+// Top profile name
+
+.profile{
+  color:#fff;
+  padding-left: 30px;
+  font-size: 18px;
+  border-bottom: 2px solid #fff;
+}
+
+
+// Menue Text design
+
+.ant-menu-item a {
+  color: #ffff;
+
+}
+
+
+.ant-layout-sider-children h1{
+  color: #fff;
+  text-align: left !important;
+  padding-left: 30px;
+  margin-bottom: 1px;
+  border-bottom: 2px solid #fff;
+}
+
+
+.ant-menu-title-content {
+  color: #fff;
+  font-size: 16px !important;
+  padding-left: 8px;
+}
+
+
+// Top back button
+
+.ant-btn-text:hover, .ant-btn-text:focus {
+  color: rgb(20, 153, 230);
+}
+.ant-menu-item:hover, .ant-menu-item:focus, #root > section > aside > div > ul > li:nth-child(8) > span:hover {
+  color: rgb(20, 153, 230) !important; 
+}
+
+.ant-btn-text, .ant-btn-text:focus {
+  color: #fff;
+}
+
+// Login form
+
+.Login_login__NRiwc {
+  margin-top: 200px !important;
+}
+
+.Login_login__NRiwc form button {
+   border: 2px solid #1890ff;
+  background-color: #1890ff !important;
+}
+
+.ant-spin-container{
+  text-align: center;
+  margin-top: 10px;
+}
+
+// Active menue text color
+.ant-menu-item-selected a{
+  color: #1890ff !important
+}
+
+
+
+// Patient list search bar
+
+.search_field {
+  padding-right: 150px;
+}
+
+.sub_menu h2{
+  padding-left: 160px;
+}
+
+// patient list table alingment
+
+.PatientList_patientTable__r43P4 td, #root > section > main > main > div > table > tbody > tr > td ,
+#root > section > main > main > div > table > thead > th{
+  text-align: left !important;
+  padding-top: 20px !important;
+}
+
+
+.PatientList_patientTable__r43P4{
+  text-align: left !important;
+}
+
+.Pagination_pagination__5jWt\+ {
+  padding-left: 160px !important;
+}
+
+.ant-btn .ant-btn-primary span{
+  padding: 20px !important;
+}
+
+.patient_list{
+  margin-top: 10px;
+}
+
+
+//Free schedule
+
+.FeeSchedule_feeScheduleTable__itIf7{
+  text-align: left;
+}
+
+.free_schedule1{
+  margin-top: 23px;
+}
+
+// Care Plan
+
+.care_list {
+  margin-top: 10px !important;
+}
+
+.care_list {
+  margin-left: -20px;
+}
+
+.care_plan_title1{
+  margin: 8px 0px 20px;
+}
+
+
+// Team Member
+
+.team_member_title1{
+  margin-top: 22px;
+}
+
+
+// User Settings
+
+.usersettings {
+  margin-top: 25px !important;
+}
+
+
+// template Builder
+
+.template_buil1{
+  margin-top: 23px;
+}
+
+.template_name1{
+  text-align: left;
+}
+
+.placeholder_list1{
+  margin-top: 15px;
+}
+
+.tox-tinymce{
+  margin-top: 10px !important;
+}
+
+//Insurance page
+
+.ant-layout .site-layout{
+  padding-left: 20px;
+}
+
+
+.free_schedule_page1{
+  padding-left: 15px;
+}
+
+
+.team_member_page1{
+  padding-left: 15px;
+}
+
+.template_builder_page1{
+  padding-left: 15px;
+}
+
+.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left{
+  border-right: none !important;
+}
+
+

@@ -19,14 +19,14 @@ const TemplateBuilder = () => {
   return (
     <>
       {
-        user.role === "administrator" ? <div>
-          <h1>Template Builder {templateList.length}</h1>
+        user.role === "administrator" ? <div className="template_builder_page1">
+          <h1 className="template_buil1">Template Builder {templateList.length}</h1>
           <table>
             <thead>
               <tr>
                 <td></td>
                 <td></td>
-                <th>Template Name</th>
+                <th className="template_name1">Template Name</th> 
               </tr>
             </thead>
             <tbody>
@@ -44,7 +44,7 @@ const TemplateBuilder = () => {
               )}
             </tbody>
           </table>
-          <Button onClick={() => setModal(true)}>Placeholder list</Button>
+          <Button className="placeholder_list1" onClick={() => setModal(true)}>Placeholder list</Button>
           <Modal title="Template Placeholder variables" visible={modal} onOk={() => setModal(false)} onCancel={() => setModal(false)}>
             <Table columns={columnsData} dataSource={placeholders} pagination={false} />
           </Modal>

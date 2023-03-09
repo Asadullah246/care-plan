@@ -4,6 +4,15 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { logoutUserApi } from "../../api";
 import { AppContext } from "../../states/app.context";
 import { LoadingScreen } from "../LoadingScreen";
+import {
+  LogoutOutlined,
+  UnorderedListOutlined,
+  ScheduleOutlined,
+  GroupOutlined,
+  BuildOutlined,
+  TeamOutlined,
+  SettingOutlined
+} from '@ant-design/icons';
 const { Content, Sider } = Layout;
 
 const adminMenus = [
@@ -57,75 +66,75 @@ const Index = () => {
   if (loading) return <LoadingScreen />;
   return (
     <Layout>
-      <Sider
-        width={220}
-        style={{
-          backgroundColor: "white",
-          overflow: "auto",
-          height: "100vh",
-          position: "sticky",
-          left: 0,
-          top: 0,
-          bottom: 0,
-        }}
-        breakpoint="sm"
-        collapsedWidth="1rem"
-      >
-        <div className="logo" />
-        <Menu selectedKeys={[currentMenu]} mode="inline" theme="light">
-          <div className="profile">
-            {/* <LaptopOutlined /> */}
-            {user?.firstName} {user?.lastName}
-          </div>
-          {isManagement ? (
-            <>
-              <Menu.Item key="1">
-                <Link to="/patient-list">Patient List</Link>
-              </Menu.Item>
-              <Menu.Item key="2">
-                <Link to="/fee-schedule">Fee Schedule</Link>
-              </Menu.Item>
-              <Menu.Item key="3">
-                <Link to="/care-plans-builder">Care Plan Builder</Link>
-              </Menu.Item>
-              <Menu.Item key="4">
-                <Link to="/team-members">Team Members</Link>
-              </Menu.Item>
-              <Menu.Item key="5">
-                <Link to="/template-builder">Template Builder</Link>
-              </Menu.Item>
-            </>
-          ) : (
-            <>
-              <Menu.Item key="1">
-                <Link to="/insurance">Insurance</Link>
-              </Menu.Item>
-              <Menu.Item key="2">
-                <Link to="/care-plan">Create Care Plan</Link>
-              </Menu.Item>
-              <Menu.Item key="3">
-                <Link to="/previous-care-plans">Previous Care</Link>
-              </Menu.Item>
-            </>
-          )}
-          <Menu.Item key="7">
-            <Link to="/user-settings">User Settings</Link>
-          </Menu.Item>
-          <Menu.Item key={"8"} onClick={logoutUser}>
-            Logout
-          </Menu.Item>
-        </Menu>
-      </Sider>
-      <Content
-        style={{
-          padding: 24,
-          margin: 0,
-          minHeight: "100vh",
-        }}
-      >
-        <Outlet />
-      </Content>
-    </Layout>
+    <Sider
+      width={250}
+      style={{
+        backgroundColor: "#4E5180",
+        overflow: "auto",
+        height: "100vh",
+        position: "sticky",
+        left: 0,
+        top: 0,
+        bottom: 0,
+      }}
+      breakpoint="sm"
+      collapsedWidth="1rem"
+    >
+      <div className="logo" />
+      <Menu selectedKeys={[currentMenu]} mode="inline" theme="light">
+        <div className="profile">
+          {/* <LaptopOutlined /> */}
+          {user?.firstName} {user?.lastName}
+        </div>
+        {isManagement ? (
+          <>
+            <Menu.Item key="1">
+              <Link to="/patient-list" className="pliste"> <UnorderedListOutlined /> &nbsp; Patient List</Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to="/fee-schedule"> <ScheduleOutlined /> &nbsp; Fee Schedule</Link>
+            </Menu.Item>
+            <Menu.Item key="3">
+              <Link to="/care-plans-builder"> <BuildOutlined /> &nbsp; Care Plan Builder</Link>
+            </Menu.Item>
+            <Menu.Item key="4">
+              <Link to="/team-members"> <TeamOutlined /> &nbsp; Team Members</Link>
+            </Menu.Item>
+            <Menu.Item key="5">
+              <Link to="/template-builder"> <GroupOutlined /> &nbsp; Template Builder</Link>
+            </Menu.Item>
+          </>
+        ) : (
+          <>
+            <Menu.Item key="1">
+              <Link to="/insurance"> Insurance</Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to="/care-plan"> Create Care Plan</Link>
+            </Menu.Item>
+            <Menu.Item key="3">
+              <Link to="/previous-care-plans"> Previous Care</Link>
+            </Menu.Item>
+          </>
+        )}
+        <Menu.Item key="7">
+          <Link to="/user-settings"> <SettingOutlined /> &nbsp;  User Settings</Link>
+        </Menu.Item>
+        <Menu.Item key={"8"} onClick={logoutUser}> <LogoutOutlined />
+        &nbsp; Logout
+        </Menu.Item>
+      </Menu>
+    </Sider>
+    <Content
+      style={{
+        padding: 24,
+        margin: 0,
+        minHeight: "100vh",
+      }}
+    >
+      <Outlet />
+    </Content>
+  </Layout>
   );
 };
 

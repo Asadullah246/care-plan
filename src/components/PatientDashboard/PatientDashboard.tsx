@@ -7,13 +7,18 @@ import { useDispatch } from "react-redux";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../../states/app.context";
 import PatientInfo from "./common/PatientInfo";
+import {
+  BuildOutlined,
+  UnorderedListOutlined,
+  ReconciliationOutlined
+} from '@ant-design/icons';
 
 const PatientDashboard = () => {
   const dispatch = useDispatch();
   const { user, loading, getPatient, patient } = useContext(AppContext);
   const navigate = useNavigate();
   const { pid } = useParams();
-  
+
   // const setCurrentPatient = async(id: string) => {
   //   const res = await findPatient(id);
   //   dispatch(selectPatient(res.data.patient));
@@ -55,15 +60,16 @@ const PatientDashboard = () => {
           Back
         </Button>
         <h1 style={{textAlign: 'center', height: '2rem'}}>{patient?.firstName} {patient?.lastName}</h1>
+
         <Menu mode="inline" theme="light" defaultSelectedKeys={['1']}>
           <Menu.Item key="1">
-            <Link to="">Insurance</Link>
+            <Link to=""><ReconciliationOutlined /> &nbsp; Insurance</Link>
           </Menu.Item>
           <Menu.Item key="2">
-            <Link to="create-careplan">Create Care Plan</Link>
+            <Link to="create-careplan"> <BuildOutlined /> &nbsp; Create Care Plan</Link>
           </Menu.Item>
           <Menu.Item key="3">
-            <Link to="previous-care-plans">Previous Care Plan</Link>
+            <Link to="previous-care-plans"> <UnorderedListOutlined /> &nbsp; Previous Care Plan</Link>
           </Menu.Item>
         </Menu>
       </Sider>
