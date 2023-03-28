@@ -21,6 +21,8 @@ import TemplateBuilder from "./pages/TemplateBuilder";
 function App() {
   return (
     <Routes>
+       {/* I want to add navbar here */}
+       
       {/* <Route path="/" element={<Home />} /> */}
       <Route path="/login" element={<Login />} />
       <Route path="resetpassword/:token" element={<ResetPassword />} />

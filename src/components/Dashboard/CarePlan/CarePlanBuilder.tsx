@@ -1,6 +1,7 @@
 import { Button, Col, Input, Modal, notification, Row, Select } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { FaPlusCircle, FaWrench } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { createCarePlanType, getTemplateList } from "../../../api";
 import { AppContext } from "../../../states/app.context";
 import { Itemplate } from "../../../types";
@@ -28,6 +29,7 @@ export const NewCarePlanTemplate = ({ load }: any) => {
   const [soc, setSoc] = useState("Initial Intensive Care");
   const [template, setTemplate] = useState<Itemplate[]>([]);
   const [temp, setTemp] = useState();
+  const navigate = useNavigate();
   const openBuilder = () => {
     setOpenModal(true);
   };
@@ -48,6 +50,7 @@ export const NewCarePlanTemplate = ({ load }: any) => {
       stageOfCare: soc,
       ...selectedCode,
       template: temp
+
     };
 
     const res = await createCarePlanType(careBuilder);

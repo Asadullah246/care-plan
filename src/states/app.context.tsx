@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+
 import { findPatient, getCodeList, getDefaultFeeSchedule, getTemplateList, refreshUser } from "../api";
 import { AddonsData, codeStruct, ExamData, ISchedule, Itemplate, ScheduleData, TherapyData, XrayData } from "../types";
 import { carePlanCalculation, CodeBreakdown } from "../utils/calculatePay";
@@ -13,6 +14,7 @@ export const AppContextProvider = ({ children }: any) => {
   const [user, setUser] = useState<any>({});
   const [patient, setPatient] = useState<any>();
   const [loading, setLoading] = useState(true);
+  const [checkIns, setCheckIns]=useState(true)
   const [cost, setCost] = useState<any>({
     totalCost: 0,
     insuranceCoverage: 0,
@@ -72,7 +74,6 @@ export const AppContextProvider = ({ children }: any) => {
   const getPatient = async (id: string) => {
 
     const res = await findPatient(id);
-    console.log("res data", res.data);
     setPatient(res.data.patient);
     return res.data.patient;
   }
@@ -113,6 +114,8 @@ export const AppContextProvider = ({ children }: any) => {
     patient,
     placeHolderData,
     codesBreakdown,
+    checkIns,
+    setCheckIns,
   };
 
   const getUser = async (refresh: string) => {
@@ -138,7 +141,7 @@ export const AppContextProvider = ({ children }: any) => {
     setCost(costResult?.costSummary);
     setPlaceHolderData(costResult?.placeHolderData as Data);
     setCodesBreakdown(costResult?.codesBreakdown);
-  }; 
+  };
   useEffect(() => {
     handleCost();
   }, [clientPlan, selectedCode]);

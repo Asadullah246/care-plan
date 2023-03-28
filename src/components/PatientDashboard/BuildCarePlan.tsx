@@ -1,7 +1,9 @@
 import { Button, Form, InputNumber, notification, Select } from "antd";
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createCarePlan, getCarePlanBySOC, getScheduleByCaseType, getTemplateById, getTemplateList, updatePatient } from "../../api";
 import { AppContext } from "../../states/app.context";
+import store from "../../store/store";
 import { Itemplate } from "../../types";
 import TemplateEditor from "../Common/TemplateEditor";
 import BuildCarePlanCard from "./BuildCarePlanCard";
@@ -11,16 +13,28 @@ const { Option } = Select;
 const pod = ["normal 1", "normal 2", "normal 3", "normal 4"];
 
 const BuildCarePlan = () => {
-  const { cost, selectedCode, setSelectedCode, setFeeSchedule, setCarePlan, clientPlan, setClientPlan, patient, setVisit } =
+  const { cost, selectedCode, setSelectedCode, setFeeSchedule, setCarePlan, clientPlan, setClientPlan, patient, setVisit, setCheckIns } =
     useContext(AppContext);
   const [fsList, setFsList] = useState<any>([]);
   const [carePlanList, setCarePlanList] = useState([]);
   const [template, setTemplate] = useState<Itemplate[]>([]);
   const [selectedTemp, setSelectedTemp] = useState();
   const [cp, setCp] = useState()
+  const navigate=useNavigate()
+  const storeData = store.getState();
+
+
 
   const handleCPchange = async (e: any) => {
     setClientPlan({ caseType: e });
+    const insurance = storeData.patient.insurance;
+    console.log("ins isss", insurance);
+    console.log("ee", e);
+    if(!(insurance.id) && e=="Insurance"){
+      setCheckIns(false)
+      navigate(-1)
+      return ;
+    }
     const res = await getScheduleByCaseType({ caseType: e });
     setFsList(res?.data.schedule);
   };
@@ -193,7 +207,7 @@ const BuildCarePlan = () => {
       <div style={{ margin: "auto", lineBreak: "loose" }}>
         <span style={{ margin: "1rem", fontWeight: "600" }}>Total Cost of Care Plan ${cost.totalCost}</span>
         <span style={{ margin: "1rem", fontWeight: "600" }}>
-          Total Cost of Care Plan (1x Payment) ${((cost.discountedAmount) != null && (cost.discountedAmount) >0) ?cost.discountedAmount : cost.userCost} 
+          Total Cost of Care Plan (1x Payment) ${((cost.discountedAmount) != null && (cost.discountedAmount) >0) ?cost.discountedAmount : cost.userCost}
         </span>
         <span style={{ margin: "1rem", fontWeight: "600" }}>Total Cost of Care Plan (Monthly) ${cost.monthlyCost}</span>
         <span style={{ margin: "1rem", fontWeight: "600" }}>
