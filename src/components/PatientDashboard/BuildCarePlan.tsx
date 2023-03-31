@@ -28,8 +28,6 @@ const BuildCarePlan = () => {
   const handleCPchange = async (e: any) => {
     setClientPlan({ caseType: e });
     const insurance = storeData.patient.insurance;
-    console.log("ins isss", insurance);
-    console.log("ee", e);
     if(!(insurance.id) && e=="Insurance"){
       setCheckIns(false)
       navigate(-1)
@@ -142,7 +140,6 @@ const BuildCarePlan = () => {
               placeholder="Select Fee Schedule"
               onChange={(e) => {
                 setFeeSchedule(e);
-                console.log("e",e);
                 handleClientPlan("feeSchedule", e);
               }}
               value={clientPlan.feeSchedule}

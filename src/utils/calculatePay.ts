@@ -306,7 +306,7 @@ export const insuranceCalculation = (
   console.log("client plan", clientPlan)
 
 
-  console.log("ins", insurance);
+  // console.log("ins", insurance);
 
   const placeHolderData: Data = {} as Data;
   // const codesBreakdown: CodeBreakdown = {
@@ -356,6 +356,8 @@ export const insuranceCalculation = (
   };
 
 
+  console.log("cleint plan", clientPlan);
+  // clientPlan.insuranceVisits
   console.log("careplan", clientPlan.carePlan);
   for (let i = 1; i <= clientPlan.carePlan.visits; i++) {
 
@@ -371,7 +373,9 @@ export const insuranceCalculation = (
       clientPlan.carePlan.visits,
       "exam",
       insurance,
-      calculations.deductableMet + currentVisitCost
+      calculations.deductableMet + currentVisitCost,
+      clientPlan.insuranceVisits
+
     );
     currentVisitCost +=examCost.amount
     currentVisitSaved +=examCost.saved
@@ -384,7 +388,8 @@ export const insuranceCalculation = (
       clientPlan.carePlan.visits,
       "adjustment",
       insurance,
-      calculations.deductableMet + currentVisitCost
+      calculations.deductableMet + currentVisitCost,
+      clientPlan.insuranceVisits
     );
     currentVisitCost +=adjustmentCost.amount
     currentVisitSaved +=adjustmentCost.saved
@@ -398,7 +403,8 @@ export const insuranceCalculation = (
       clientPlan.carePlan.visits,
       "xrays",
       insurance,
-      calculations.deductableMet + currentVisitCost
+      calculations.deductableMet + currentVisitCost,
+      clientPlan.insuranceVisits
     );
     currentVisitCost +=xrayCost.amount
     currentVisitSaved +=xrayCost.saved
@@ -411,7 +417,8 @@ export const insuranceCalculation = (
       clientPlan.carePlan.visits,
       "addons",
       insurance,
-      calculations.deductableMet + currentVisitCost
+      calculations.deductableMet + currentVisitCost,
+      clientPlan.insuranceVisits
     );
     currentVisitCost +=addonsCost.amount
     currentVisitSaved +=addonsCost.saved
@@ -424,7 +431,8 @@ export const insuranceCalculation = (
       clientPlan.carePlan.visits,
       "therapies",
       insurance,
-      calculations.deductableMet + currentVisitCost
+      calculations.deductableMet + currentVisitCost,
+      clientPlan.insuranceVisits
     );
     currentVisitCost +=therapiesCost.amount
     currentVisitSaved +=therapiesCost.saved
@@ -610,13 +618,18 @@ const getCodeCost = (
   visits: any,
   itemName: string,
   insurance: any,
-  deductableMet: number
+  deductableMet: number,
+  usedVisits:number
 ) => {
+
   // console.log(feeSchedule, defaultFS,insurance);
   const deductableLeft =
     Number(insurance.individual_deductable) - Number(insurance.individual_deductable_Met);
   const visit =
     Number(insurance.visits_allowed) - Number(insurance.visits_used);
+    if(usedVisits > visit){
+      alert("Insurance visit shouldn't be greater than remaining visit")
+    }
 
   const cost2 = Object.values(planItem).map((codeItem: any) => {
     if (itemName == "exam") {
@@ -627,7 +640,7 @@ const getCodeCost = (
           code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
 
 
-        if (insurance?.exam_co_pay !=null && insurance?.exam_co_pay >= 0 && i<=visit) {
+        if (insurance?.exam_co_pay !=null && insurance?.exam_co_pay > 0 && deductableMet >= deductableLeft && i<=usedVisits) {
           const amount = insurance.exam_co_pay;
 
           const saved = Number(mainAmount)-Number(amount);
