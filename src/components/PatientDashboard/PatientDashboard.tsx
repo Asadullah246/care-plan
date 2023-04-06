@@ -32,20 +32,10 @@ useEffect(()=>{
 
   if(!checkIns){
     setCheckIns(true)
-    console.log("enter");
-    const createBtn=document.querySelector(".createCarePlan")  as HTMLButtonElement ;
-    console.log(createBtn); 
-    if(createBtn){
-      createBtn.click()
-    }
-    // navigate(`/patient/${pid}/create-careplan`)
-
-    // window.location.href=`/patient/${pid}/create-careplan`
   }
 },[checkIns])
 
   const gotoPreviousPage = () => {
-    console.log('going to prev page');
     navigate("/patient-list")
   }
 

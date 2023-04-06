@@ -30,7 +30,7 @@ const BuildCarePlan = () => {
     const insurance = storeData.patient.insurance;
     if(!(insurance.id) && e=="Insurance"){
       setCheckIns(false)
-      navigate(-1)
+      navigate(`/patient/${patient._id}`)
       return ;
     }
     const res = await getScheduleByCaseType({ caseType: e });

@@ -239,6 +239,16 @@ const NewInsurance = ({ addInsurance, type }: any) => {
               />
             </td>
           </tr>
+
+          {/* <tr>
+            <td>Co - Insurance</td>
+            <td>
+              <select name="co_insurance" onChange={handleChange}  id="co_insurance">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </td>
+          </tr> */}
           <tr>
             <td>Allowed Percentage</td>
             <td>
@@ -310,16 +320,8 @@ const NewInsurance = ({ addInsurance, type }: any) => {
               </select>
             </td> */}
           </tr>
-          <tr>
-            <td>Co - Insurance</td>
-            <td>
-              <select name="co_insurance" onChange={handleChange}  id="co_insurance">
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
+
+          {/* <tr>
             <td>
               <label htmlFor="xrayCoverage">X-ray coverage</label>
             </td>
@@ -335,8 +337,8 @@ const NewInsurance = ({ addInsurance, type }: any) => {
                 <option value="n/a">Not Applicable</option>
               </select>
             </td>
-          </tr>
-          {edited?.x_ray_coverage === "yes" && (
+          </tr> */}
+          {/* {edited?.x_ray_coverage === "yes" && (
             <tr>
               <td>X-ray Percent coverage</td>
               <td>
@@ -351,7 +353,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
                 />
               </td>
             </tr>
-          )}
+          )} */}
           <tr>
             <td>
               <label htmlFor="xrayDeductable">X-rays subject to deductable</label>

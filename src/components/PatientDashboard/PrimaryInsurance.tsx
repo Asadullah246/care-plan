@@ -13,7 +13,7 @@ export const PrimaryInsurance = ({ data, type }: any) => {
   const loadData = async () => {
     if(type=="Primary Insurance"){
       const res = await findInsurance(data);
-      
+
       if (res.status === 200) {
         console.log("resData is ", res.data);
         setInsurance(res.data.insurance);
@@ -209,32 +209,51 @@ setLoading(false);
           </tr>
           <tr>
             <td>Visit Co Pay</td>
-            <td>
+            {/* <td>
               <select name="visit_co_pay" disabled defaultValue={insurance?.visit_co_pay} id="visit_co_pay">
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
+            </td> */}
+            <td>
+              <InputNumber
+                style={{ width: "150px" }}
+                min={0}
+                defaultValue={insurance?.visit_co_pay}
+                name="visit_co_pay"
+                id="visit_co_pay"
+              />
             </td>
           </tr>
           <tr>
             <td>Exam Co Pay</td>
-            <td>
+            {/* <td>
               <select name="exam_co_pay" disabled defaultValue={insurance?.exam_co_pay} id="exam_co_pay">
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
+            </td> */}
+            <td>
+              <InputNumber
+                style={{ width: "150px" }}
+                min={0}
+                name="exam_co_pay"
+               defaultValue={insurance?.exam_co_pay}
+                id="exam_co_pay"
+              />
             </td>
           </tr>
           <tr>
-            <td>Co - Insurance</td>
-            <td>
+            {/* <td>Co - Insurance</td> */}
+            {/* <td>
               <select name="co_insurance" disabled defaultValue={insurance?.co_insurance} id="co_insurance">
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
-            </td>
+            </td> */}
+
           </tr>
-          <tr>
+          {/* <tr>
             <td>
               <label htmlFor="xrayCoverage">X-ray coverage</label>
             </td>
@@ -245,8 +264,8 @@ setLoading(false);
                 <option value="n/a">Not Applicable</option>
               </select>
             </td>
-          </tr>
-          {insurance?.x_ray_coverage === "yes" && (
+          </tr> */}
+          {/* {insurance?.x_ray_coverage === "yes" && (
             <tr>
               <td>X-ray Percent coverage</td>
               <td>
@@ -260,7 +279,7 @@ setLoading(false);
                 />
               </td>
             </tr>
-          )}
+          )} */}
           <tr>
             <td>
               <label htmlFor="xrayDeductable">X-rays subject to deductable</label>
