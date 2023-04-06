@@ -201,6 +201,7 @@ export const latestCalculations = (
         }
       });
     });
+
     return { covered, uncovered, defaultCost, discounted };
   };
   const adjustmentCost = getCodeCost2(adjustments, "adjustments");
@@ -239,7 +240,7 @@ export const latestCalculations = (
   const discountedAmount = Number(discount);
   const totalCost = insuranceCoverage + userCost;
   const monthlyCost = Number(
-    (userCost / clientPlan.carePlan.months).toFixed(2)
+    (discountedAmount / clientPlan.carePlan.months).toFixed(2)
   );
   const defaultFeeScheduleCost =
     adjustmentCost.defaultCost +
@@ -262,7 +263,7 @@ export const latestCalculations = (
   placeHolderData["{stageOfCare}"] = clientPlan.stageOfCare;
   placeHolderData["{totalDefaultFeeSchedulePrice}"] = defaultFeeScheduleCost;
   placeHolderData["{totalCareplanPrice}"] = totalCost;
-  placeHolderData["{outOfPocket}"] = discountedAmount || userCost;
+  placeHolderData["{outOfPocket}"] = userCost;
   placeHolderData["{insuranceCoverage}"] = insuranceCoverage;
   placeHolderData["{monthlyPrice}"] = monthlyCost;
   // placeHolderData["{patientName}"] = 'john doe';
