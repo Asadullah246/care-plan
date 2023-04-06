@@ -132,10 +132,10 @@ const placeholders = [
     placeholder: "{currentYear}",
     details: "Current Year",
   },
-  // {
-  //   placeholder: "{}",
-  //   details: "",
-  // },
+  {
+    placeholder: "{discountedPrice}",
+    details: "1x Payment",
+  },
   // {
   //   placeholder: "{}",
   //   details: "",
@@ -162,7 +162,7 @@ const placeholders = [
 "{phaseOfDegeneration}": string;
 "{feeSchedule}": string;
 "{careplanTemplateName}": string;
-*/ 
+*/
 
 export { columnsData, placeholders };
 

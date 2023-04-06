@@ -240,7 +240,7 @@ export const latestCalculations = (
   const discountedAmount = Number(discount);
   const totalCost = insuranceCoverage + userCost;
   const monthlyCost = Number(
-    (discountedAmount / clientPlan.carePlan.months).toFixed(2)
+    (userCost / clientPlan.carePlan.months).toFixed(2)
   );
   const defaultFeeScheduleCost =
     adjustmentCost.defaultCost +
@@ -264,6 +264,7 @@ export const latestCalculations = (
   placeHolderData["{totalDefaultFeeSchedulePrice}"] = defaultFeeScheduleCost;
   placeHolderData["{totalCareplanPrice}"] = totalCost;
   placeHolderData["{outOfPocket}"] = userCost;
+  placeHolderData["{discountedPrice}"] =discountedAmount || userCost;
   placeHolderData["{insuranceCoverage}"] = insuranceCoverage;
   placeHolderData["{monthlyPrice}"] = monthlyCost;
   // placeHolderData["{patientName}"] = 'john doe';
@@ -493,6 +494,7 @@ export const insuranceCalculation = (
   placeHolderData["{outOfPocket}"] = reducedNumberToFixed(
     calculations.userCost
   );
+   placeHolderData["{discountedPrice}"] = calculations.userCost; 
   placeHolderData["{insuranceCoverage}"] = reducedNumberToFixed(
     calculations.insuranceCoverage
   );

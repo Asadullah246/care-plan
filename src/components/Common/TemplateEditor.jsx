@@ -88,7 +88,7 @@ const TemplateEditor = ({ data, mode }) => {
                             placeholder={data ? data.name : "Enter name"}
                             value={name}
                             style={{ width: 200 }}
-                            onChange={handleChange}
+                            onChange={handleChange} 
                             type="text"
                         />
                     </p>

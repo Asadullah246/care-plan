@@ -13,6 +13,7 @@ export interface Data {
 "{totalCareplanPrice}": number;
 "{monthlyPrice}": number;
 "{outOfPocket}": number;
+"{discountedPrice}": number;
 "{patientName}": string;
 "{insuranceCoverage}": number;
 "{phaseOfDegeneration}": string;
