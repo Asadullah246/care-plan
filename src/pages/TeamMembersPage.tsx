@@ -5,7 +5,7 @@ import TeamMembers from "../components/Dashboard/TeamMembers/TeamMembers";
 import { checkIsManagement, checkPermission } from "../hooks/appsHooks";
 import { AppContext } from "../states/app.context";
 
-export const TeamMembersPage = () => {
+ const TeamMembersPage = () => {
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
   const isManagement = checkIsManagement(user);
@@ -18,3 +18,4 @@ export const TeamMembersPage = () => {
   if (hasPermission) return <TeamMembers />;
   return <NoPermission />;
 };
+export default TeamMembersPage ;

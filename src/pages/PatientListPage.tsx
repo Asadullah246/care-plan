@@ -5,7 +5,7 @@ import PatientList from "../components/Dashboard/PatientList/PatientList";
 import { checkIsManagement, checkPermission } from "../hooks/appsHooks";
 import { AppContext } from "../states/app.context";
 
-export const PatientListPage = () => {
+ const PatientListPage = () => {
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
   const isManagement = checkIsManagement(user);
@@ -18,3 +18,4 @@ export const PatientListPage = () => {
   if (hasPermission) return <PatientList />;
   return <NoPermission />;
 };
+export default PatientListPage ;

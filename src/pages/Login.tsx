@@ -9,7 +9,7 @@ import { RootState } from "../store/rootReducer";
 import { setUser } from "../store/User/user.action";
 import styles from "./Login.module.scss";
 
-export const Login = () => {
+ const Login = () => {
   const { loading, setUser: setContextUser } = useContext(AppContext);
   const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
@@ -134,3 +134,4 @@ export const Login = () => {
     </div>
   );
 };
+export default Login ;

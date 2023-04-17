@@ -2,7 +2,7 @@ import axios from "axios";
 import { IInsurance, IUser } from "../types";
 
 // const base = "http://localhost:3305";
-const base = 'https://careplanproject.onrender.com';  
+const base = 'https://careplanproject.onrender.com'; 
 
 
 export const registerUser = async (user: IUser) => {
@@ -472,6 +472,7 @@ export const getTherapyList = async () => {
 
 // care plan api
 export const createCarePlan = async (info: any) => {
+  console.log("info is", info);
   try {
     const headers = {
       token: localStorage.getItem("token") || "",

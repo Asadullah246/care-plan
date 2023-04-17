@@ -6,7 +6,7 @@ import NewInsurance from "../components/PatientDashboard/NewInsurance";
 import { PrimaryInsurance } from "../components/PatientDashboard/PrimaryInsurance";
 import { AppContext } from "../states/app.context";
 
-export const Insurance = () => {
+ const Insurance = () => {
   const { patient,checkIns, setCheckIns } = useContext(AppContext);
   const navigate = useNavigate();
   const { pid } = useParams();
@@ -30,3 +30,4 @@ export const Insurance = () => {
   </Row>)
   // return <NewInsurance addInsurance={addPrimaryInsurance} />;
 };
+export default Insurance ;

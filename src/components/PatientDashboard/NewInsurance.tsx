@@ -52,12 +52,16 @@ const NewInsurance = ({ addInsurance, type }: any) => {
     console.log("editedd",edited);
     setLoading(true);
     const res = await addInsurance(edited, patient._id);
-    console.log(res);
-    setLoading(false);
-    if (res.status === 201) {
+    console.log("res", res);
+
+    if (res?.status === 201) {
+      setLoading(false);
       message.success("Insurance added");
+
     } else {
+      setLoading(false);
       message.error("Something went wrong!");
+      
     }
   };
   useEffect(() => {

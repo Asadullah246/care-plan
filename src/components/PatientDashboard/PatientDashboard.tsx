@@ -31,7 +31,7 @@ const PatientDashboard = () => {
 useEffect(()=>{
 
   if(!checkIns){
-    setCheckIns(true)
+    // setCheckIns(true)
   }
 },[checkIns])
 

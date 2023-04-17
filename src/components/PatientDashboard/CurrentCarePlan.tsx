@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../states/app.context";
 import BuildCarePlan from "./BuildCarePlan";
 
-export const CurrentCarePlan = () => {
+ const CurrentCarePlan = () => {
   const { user } = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -16,3 +16,4 @@ export const CurrentCarePlan = () => {
   if (currentPlan) return <BuildCarePlan />;
   return <BuildCarePlan />;
 };
+export default CurrentCarePlan ; 

@@ -191,15 +191,24 @@ export const latestCalculations = (
       const dcost = defaultAmount * item.visits.length;
       defaultCost += dcost;
 
+     console.log("length vis", item.visits.length);
+
+     if(item.visits.length >=1){
       item.visits.forEach((vis: number) => {
         if (vis <= insuranceVisits) {
+          console.log("fist vis", vis);
           covered += amount;
           // discounted += (amount -discountedAmount )
         } else {
+          console.log("2nd vis", vis);
           uncovered += amount;
           discounted += discounteded;
         }
       });
+     }
+    
+
+
     });
 
     return { covered, uncovered, defaultCost, discounted };
@@ -334,7 +343,7 @@ export const insuranceCalculation = (
   const deductableLeft =
     insurance.individual_deductable - insurance.individual_deductable_Met;
 
-  const co_insurance_persantage = insurance.allowed_percentage;
+  // const co_insurance_persantage = insurance.allowed_percentage;
   if (!clientPlan.carePlan)
     return {
       costSummary: {
@@ -494,7 +503,7 @@ export const insuranceCalculation = (
   placeHolderData["{outOfPocket}"] = reducedNumberToFixed(
     calculations.userCost
   );
-   placeHolderData["{discountedPrice}"] = calculations.userCost; 
+   placeHolderData["{discountedPrice}"] = calculations.userCost;
   placeHolderData["{insuranceCoverage}"] = reducedNumberToFixed(
     calculations.insuranceCoverage
   );

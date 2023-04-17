@@ -50,6 +50,7 @@ export const AppContextProvider = ({ children }: any) => {
   const [templateList, setTemplateList] = useState<Itemplate[]>([]);
 
   const [clientPlan, setClientPlan] = useState<any>({ insuranceVisits: 0 });
+  const [gettingPatient, setGettingPatient]=useState<any>(true)
 
   const gettingTemplateBuilderList = async () => {
     const res = await getTemplateList();
@@ -116,6 +117,8 @@ export const AppContextProvider = ({ children }: any) => {
     codesBreakdown,
     checkIns,
     setCheckIns,
+    gettingPatient,
+    setGettingPatient,
   };
 
   const getUser = async (refresh: string) => {

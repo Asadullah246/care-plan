@@ -1,5 +1,5 @@
 import { Button, DatePicker, Input, Modal, Skeleton } from "antd";
-import { ChangeEventHandler, useEffect, useState } from "react";
+import { ChangeEventHandler, useContext, useEffect, useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { FaPlusCircle } from "react-icons/fa";
 import { useDispatch } from "react-redux";
@@ -9,10 +9,12 @@ import { IUser } from "../../../types";
 import { Pagination } from "../../Pagination";
 import PatientDetails from "./PatientDetails";
 import styles from "./PatientList.module.scss";
+// import { AppContext } from "../../../states/app.context";
 
 const PatientList = () => {
   const [patients, setPatients] = useState<IUser[]>([]);
   const dispatch = useDispatch();
+  // const { gettingPatient, setGettingPatient } = useContext(AppContext);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [newPatient, setNewPatient] = useState<IUser>({});
@@ -214,7 +216,7 @@ const PatientList = () => {
             placeholder="Date of Birth"
           /> */}
           <input type="date" name="dob" onChange={handleDob} id="" />
-          
+
         </div>
       </Modal>
     </main>

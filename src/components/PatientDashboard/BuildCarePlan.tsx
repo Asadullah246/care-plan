@@ -13,7 +13,7 @@ const { Option } = Select;
 const pod = ["normal 1", "normal 2", "normal 3", "normal 4"];
 
 const BuildCarePlan = () => {
-  const { cost, selectedCode, setSelectedCode, setFeeSchedule, setCarePlan, clientPlan, setClientPlan, patient, setVisit, setCheckIns } =
+  const { cost, selectedCode, setSelectedCode, setFeeSchedule, setCarePlan, clientPlan, setClientPlan, patient, setVisit, setCheckIns,gettingPatient, setGettingPatient } =
     useContext(AppContext);
   const [fsList, setFsList] = useState<any>([]);
   const [carePlanList, setCarePlanList] = useState([]);
@@ -30,6 +30,7 @@ const BuildCarePlan = () => {
     const insurance = storeData.patient.insurance;
     if(!(insurance.id) && e=="Insurance"){
       setCheckIns(false)
+      // setGettingPatient(!gettingPatient)
       navigate(`/patient/${patient._id}`)
       return ;
     }
@@ -59,7 +60,7 @@ const BuildCarePlan = () => {
         return el;
       }
     });
-    console.log(carePlanTemplate, e, 'care plan')
+    console.log('care plan', carePlanTemplate, e, )
     const { Adjustments, AddOns, Exams, Therapies, XRays, frequency, months, visits } = carePlanTemplate;
     setClientPlan((p: any) => ({
       ...p,
@@ -77,7 +78,7 @@ const BuildCarePlan = () => {
   };
 
   const submitCarePlan = async () => {
-    // console.log({
+    // console.log("c",{
     //   patient: patient._id,
     //   carePlanType: cp,
     //   cost,
@@ -87,6 +88,8 @@ const BuildCarePlan = () => {
       carePlanType: cp,
       cost,
     });
+    console.log("response", response);
+   if(response){
     if (response.status === 201) {
       if (patient.currentCarePlan) {
         const current = patient.currentCarePlan;
@@ -104,7 +107,11 @@ const BuildCarePlan = () => {
         })
       }
     }
-  };
+   }
+   else {
+    console.log("no response");
+   }
+  }; 
 
   const gettingTemplateList = async () => {
     const temp = await getTemplateList();
@@ -154,6 +161,7 @@ const BuildCarePlan = () => {
           <Form.Item name="Insurance Visit" label="Insurance Visit" rules={[{ required: true }]}>
             <InputNumber
               onChange={(e) => handleClientPlan("insuranceVisits", e)}
+              type="number"
               value={clientPlan.insuranceVisits || 0}
               disabled={clientPlan.caseType != 'Insurance'}
               placeholder="Insurance Visit"
