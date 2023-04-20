@@ -24,10 +24,11 @@ import { LoadingScreen } from "./components/LoadingScreen";
 const Login = lazy(() => import('./pages/Login')) ;
 const ResetPassword = lazy(() => import('./pages/ResetPassword')) ;
 const Layout = lazy(() => import('./components/Layout/index')) ;
+const PatientListPage = lazy(() => import('./pages/PatientListPage')) ;
 const NotFound = lazy(() => import('./pages/NotFound/NotFound')) ;
 const Dashboard = lazy(() => import('./pages/Dashboard')) ;
 const TeamMembersPage = lazy(() => import('./pages/TeamMembersPage')) ;
-const PatientListPage = lazy(() => import('./pages/PatientListPage')) ;
+
 const FeeSchedulePage = lazy(() => import('./pages/FeeSchedulePage')) ;
 const CarePlanTemplate = lazy(() => import('./pages/CarePlanTemplate')) ;
 const UserSettings = lazy(() => import('./components/Dashboard/UserSettings/UserSettings')) ;
@@ -41,7 +42,7 @@ const PreviousCarePlan = lazy(() => import('./components/PatientDashboard/Previo
 
 function App() {
   return (
-    <Suspense fallback={<LoadingScreen/>}> 
+    <Suspense fallback={<LoadingScreen/>}>
       <Routes>
        {/* I want to add navbar here */}
 

@@ -19,7 +19,7 @@ const PatientDashboard = () => {
 
   const { pid } = useParams();
   const location=useLocation()
-  const from = location.state?.from?.pathname || "/";
+  // const from = location.state?.from?.pathname || "/";
   const navigate = useNavigate();
 
   // const setCurrentPatient = async(id: string) => {
