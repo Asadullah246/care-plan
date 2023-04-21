@@ -4,28 +4,21 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../../states/app.context";
 import { IInsurance } from "../../types";
+import { updatePrimaryInsurance } from "../../api";
 
 const requireDiv=<span style={{fontSize:"20px", color:"#ff4d4f",}} >*</span>
 
-const NewInsurance = ({ addInsurance, type }: any) => {
-  const { getPatient, patient } = useContext(AppContext);
+const EditInsurance = ({ insurance, id, mode, setMode }: any) => {
+//   const { getPatient, patient } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
-  const [edited, setEdited] = useState<IInsurance>({
-    x_ray_coverage: "no",
-    co_insurance: "yes",
-    benefitsBase: {
-      type: "Calendar",
-      date: new Date(new Date().getFullYear(), 0, 1),
-    },
-    start_meeting_deductable: "yes",
-  } as IInsurance);
+  const [edited, setEdited] = useState<IInsurance>(insurance as IInsurance);
   const { pid } = useParams();
 
   const handleChange = (e: any) => {
     console.log("e is ",e.target.name, e.target.value);
     const updated = { ...edited, [e.target.name]: e.target.value };
     setEdited(updated);
-    console.log("ed",updated);
+
   };
 
   const handleBenefitsType = (e: any) => {
@@ -49,16 +42,19 @@ const NewInsurance = ({ addInsurance, type }: any) => {
     console.log(e.target.value);
   };
 
+  console.log("ed",edited);
+
   const updateInsurance = async (e: any) => {
     e.preventDefault();
     console.log("editedd",edited);
     setLoading(true);
-    const res = await addInsurance(edited, patient._id);
+    const res = await updatePrimaryInsurance(edited, insurance.id); 
     console.log("res", res);
 
     if (res?.status === 201) {
       setLoading(false);
       message.success("Insurance added");
+      setMode("pri")
 
     } else {
       setLoading(false);
@@ -66,13 +62,13 @@ const NewInsurance = ({ addInsurance, type }: any) => {
 
     }
   };
-  useEffect(() => {
-    getPatient(pid);
-  }, [])
+//   useEffect(() => {
+//     getPatient(pid);
+//   }, [])
 
   return (
     <form onSubmit={updateInsurance}>
-      <Title level={3}>Add {type}</Title>
+      <Title level={3}>Edit Insurance</Title>
       <table>
         <tbody>
           <tr>
@@ -376,9 +372,12 @@ const NewInsurance = ({ addInsurance, type }: any) => {
         <Button type="primary" onClick={updateInsurance} loading={loading}>
           Save Insurance
         </Button>
+              <button style={{backgroundColor:"transparent",border:"none", borderRadius:"2px", cursor:"pointer", marginLeft:"25px"}} onClick={()=>setMode("pri")} >
+                cancel
+              </button>
       </table>
     </form>
   );
 };
 
-export default NewInsurance;
+export default EditInsurance;

@@ -111,7 +111,7 @@ const BuildCarePlan = () => {
    else {
     console.log("no response");
    }
-  }; 
+  };
 
   const gettingTemplateList = async () => {
     const temp = await getTemplateList();

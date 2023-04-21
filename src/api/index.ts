@@ -2,7 +2,7 @@ import axios from "axios";
 import { IInsurance, IUser } from "../types";
 
 const base = "http://localhost:3305";
-// const base = 'https://careplanproject.onrender.com'; 
+// const base = 'https://careplanproject.onrender.com';
 
 
 export const registerUser = async (user: IUser) => {
@@ -137,6 +137,7 @@ export const updatePatient = async (pid: string, info: any) => {
   }
 };
 
+
 export const addPrimaryInsurance = async (primaryInsurance: IInsurance, pid: string) => {
   console.log("saving primary insurance..", pid);
   try {
@@ -155,6 +156,7 @@ export const addPrimaryInsurance = async (primaryInsurance: IInsurance, pid: str
   }
 };
 
+
 export const addSecondaryInsurance = async (secondaryInsurance: IInsurance, pid: string) => {
   console.log("saving secondary insurance..", pid);
   try {
@@ -164,6 +166,23 @@ export const addSecondaryInsurance = async (secondaryInsurance: IInsurance, pid:
     const res = await axios.post(
       `${base}/patients/secondaryinsurance/${pid}`,
       { secondary: secondaryInsurance },
+      { headers }
+    );
+    console.log(res);
+    return res;
+  } catch ({ message }) {
+    console.log(message);
+  }
+};
+export const updatePrimaryInsurance = async (primaryInsurance: IInsurance, id: string) => {
+  console.log("updating primary insurance..", id);
+  try {
+    const headers = {
+      token: localStorage.getItem("token") || "",
+    };
+    const res = await axios.patch(
+      `${base}/patients/insurance/${id}`,
+      { primary: primaryInsurance }, 
       { headers }
     );
     console.log(res);
