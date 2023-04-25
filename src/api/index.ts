@@ -2,7 +2,7 @@ import axios from "axios";
 import { IInsurance, IUser } from "../types";
 
 // const base = "http://localhost:3305";
-const base = 'https://careplanproject.onrender.com'; 
+const base = 'https://careplanproject.onrender.com';
 
 
 export const registerUser = async (user: IUser) => {
@@ -12,7 +12,7 @@ export const registerUser = async (user: IUser) => {
     localStorage.setItem("refresh", res.data.refresh);
     if (res) return res.data.user;
   } catch (error) {
-    console.log(error);
+    console.log("err", error);
   }
 };
 
