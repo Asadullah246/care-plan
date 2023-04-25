@@ -6,13 +6,14 @@ import PreviousCareItem from "./PreviousCareItem";
 const PreviousCarePlan = () => {
   const { user, loading, patient, setPatient } = useContext(AppContext);
   // const [patient, setPatient] = useState<any>({})
+  console.log("prev", patient); 
   const navigate = useNavigate();
   useEffect(() => {
     if (loading) return;
     if (user?.email === undefined) {
       navigate("/login");
     }
-  }, []); 
+  }, []);
   return (
     <div>
       <h1 style={{ textAlign: "center" }}>Previous Care Plans</h1>

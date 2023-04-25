@@ -206,7 +206,7 @@ export const latestCalculations = (
         }
       });
      }
-    
+
 
 
     });
@@ -652,7 +652,7 @@ const getCodeCost = (
 
         if (
           insurance?.exam_co_pay != null &&
-          insurance?.exam_co_pay >= 0 &&
+          insurance?.exam_co_pay > 0 &&
           i <= usedVisits
         ) {
           const amount = insurance.exam_co_pay;
@@ -811,7 +811,7 @@ const getCodeCost = (
 
       if (
         insurance.visit_co_pay != null &&
-        insurance.visit_co_pay >= 0 &&
+        insurance.visit_co_pay > 0 && 
         i <= usedVisits
       ) {
         const amount = insurance.visit_co_pay;

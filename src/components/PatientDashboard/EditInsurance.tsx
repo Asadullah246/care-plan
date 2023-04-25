@@ -6,16 +6,16 @@ import { AppContext } from "../../states/app.context";
 import { IInsurance } from "../../types";
 import { updatePrimaryInsurance } from "../../api";
 
-const requireDiv=<span style={{fontSize:"20px", color:"#ff4d4f",}} >*</span>
+const requireDiv = <span style={{ fontSize: "20px", color: "#ff4d4f", }} >*</span>
 
-const EditInsurance = ({ insurance, id, mode, setMode }: any) => {
-//   const { getPatient, patient } = useContext(AppContext);
+const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
+  const { getPatient, patient } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
   const [edited, setEdited] = useState<IInsurance>(insurance as IInsurance);
   const { pid } = useParams();
 
   const handleChange = (e: any) => {
-    console.log("e is ",e.target.name, e.target.value);
+    console.log("e is ", e.target.name, e.target.value);
     const updated = { ...edited, [e.target.name]: e.target.value };
     setEdited(updated);
 
@@ -42,19 +42,24 @@ const EditInsurance = ({ insurance, id, mode, setMode }: any) => {
     console.log(e.target.value);
   };
 
-  console.log("ed",edited);
+  console.log("ed", edited);
 
   const updateInsurance = async (e: any) => {
     e.preventDefault();
-    console.log("editedd",edited);
+    console.log("editedd", edited);
     setLoading(true);
-    const res = await updatePrimaryInsurance(edited, insurance.id); 
+    const res = await updatePrimaryInsurance(edited, insurance.id);
     console.log("res", res);
 
     if (res?.status === 201) {
+
+      await loadData()
+      console.log("new", pid, patient);
       setLoading(false);
       message.success("Insurance added");
       setMode("pri")
+
+
 
     } else {
       setLoading(false);
@@ -62,15 +67,15 @@ const EditInsurance = ({ insurance, id, mode, setMode }: any) => {
 
     }
   };
-//   useEffect(() => {
-//     getPatient(pid);
-//   }, [])
+  //   useEffect(() => {
+  //     getPatient(pid);
+  //   }, [])
 
   return (
     <form onSubmit={updateInsurance}>
       <Title level={3}>Edit Insurance</Title>
       <table>
-        <tbody>
+        <tbody >
           <tr>
             <td>
               <label htmlFor="companyName required"> {requireDiv} Insurance Company</label>
@@ -311,7 +316,7 @@ const EditInsurance = ({ insurance, id, mode, setMode }: any) => {
                 type="number"
                 min={0}
                 onChange={handleChange}
-                defaultValue={edited?.visit_co_pay}
+                defaultValue={edited?.exam_co_pay}
                 name="exam_co_pay"
                 id="exam_co_pay"
               />
@@ -369,12 +374,14 @@ const EditInsurance = ({ insurance, id, mode, setMode }: any) => {
             </td>
           </tr>
         </tbody>
-        <Button type="primary" onClick={updateInsurance} loading={loading}>
+       <div style={{paddingTop:"20px"}}> 
+       <Button type="primary" onClick={updateInsurance} loading={loading}>
           Save Insurance
         </Button>
-              <button style={{backgroundColor:"transparent",border:"none", borderRadius:"2px", cursor:"pointer", marginLeft:"25px"}} onClick={()=>setMode("pri")} >
-                cancel
-              </button>
+        <button style={{ backgroundColor: "transparent", border: "none", borderRadius: "2px", cursor: "pointer", marginLeft: "25px" }} onClick={() => setMode("pri")} >
+          cancel
+        </button>
+       </div>
       </table>
     </form>
   );

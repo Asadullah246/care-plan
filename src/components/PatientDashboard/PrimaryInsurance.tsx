@@ -350,13 +350,13 @@ export const PrimaryInsurance = ({ data, type }: any) => {
                   </tr>
                 </tbody>
               </table>
-              <button style={{backgroundColor:"transparent", padding:"3px 10px", borderRadius:"2px", cursor:"pointer",}} onClick={()=>editIns("edit")} >
+              <button style={{backgroundColor:"transparent", padding:"3px 10px", borderRadius:"2px", cursor:"pointer",marginTop:"20px"}} onClick={()=>editIns("edit")} >
                 Edit Insurance
               </button>
             </>
 
               : <>
-              <EditInsurance insurance={insurance} id={pid} mode={mode} setMode={setMode}></EditInsurance>
+              <EditInsurance insurance={insurance} id={pid} mode={mode} setMode={setMode} loadData={loadData}></EditInsurance>
 
               </>}
 
