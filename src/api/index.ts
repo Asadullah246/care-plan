@@ -12,7 +12,7 @@ export const registerUser = async (user: IUser) => {
     localStorage.setItem("refresh", res.data.refresh);
     if (res) return res.data.user;
   } catch (error) {
-    console.log("err", error);
+    console.log("err is", error);
   }
 };
 
