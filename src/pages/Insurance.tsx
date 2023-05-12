@@ -30,7 +30,7 @@ import { AppContext } from "../states/app.context";
   // }
 
   return (<Row gutter={16}>
-    <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+    <Col xs={24} sm={24} md={24} lg={16} xl={16}> 
       {patient?.primaryInsurance ? <PrimaryInsurance type="Primary Insurance" data={patient.primaryInsurance} /> : <NewInsurance type="Primary Insurance" addInsurance={addPrimaryInsurance} />}
     </Col>
     {/* <Col xs={24} sm={24} md={24} lg={12} xl={12}>

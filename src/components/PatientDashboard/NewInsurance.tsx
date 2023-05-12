@@ -5,13 +5,14 @@ import { useParams } from "react-router-dom";
 import { AppContext } from "../../states/app.context";
 import { IInsurance } from "../../types";
 
-const requireDiv=<span style={{fontSize:"20px", color:"#ff4d4f",}} >*</span>
+const requireDiv = <span style={{ fontSize: "20px", color: "#ff4d4f", }} >*</span>
 
 const NewInsurance = ({ addInsurance, type }: any) => {
   const { getPatient, patient } = useContext(AppContext);
   const [loading, setLoading] = useState(false);
   const [edited, setEdited] = useState<IInsurance>({
     x_ray_coverage: "no",
+    office_visit_992XX:"covered",
     co_insurance: "yes",
     benefitsBase: {
       type: "Calendar",
@@ -22,10 +23,10 @@ const NewInsurance = ({ addInsurance, type }: any) => {
   const { pid } = useParams();
 
   const handleChange = (e: any) => {
-    console.log("e is ",e.target.name, e.target.value);
+    console.log("e is ", e.target.name, e.target.value);
     const updated = { ...edited, [e.target.name]: e.target.value };
     setEdited(updated);
-    console.log("ed",updated);
+    console.log("ed", updated);
   };
 
   const handleBenefitsType = (e: any) => {
@@ -51,7 +52,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
 
   const updateInsurance = async (e: any) => {
     e.preventDefault();
-    console.log("editedd",edited);
+    console.log("editedd", edited);
     setLoading(true);
     const res = await addInsurance(edited, patient._id);
     console.log("res", res);
@@ -76,6 +77,11 @@ const NewInsurance = ({ addInsurance, type }: any) => {
       <table>
         <tbody>
           <tr>
+            <td className="font-bold text-xl " style={{ fontSize: "20px", fontWeight: "500" }}>Insurance</td>
+            <td className="font-bold text-xl " style={{ fontSize: "20px", fontWeight: "500" }}>Value</td>
+            <td className="font-bold text-xl " style={{ fontSize: "20px", fontWeight: "500" }}>Visits</td>
+          </tr>
+          <tr>
             <td>
               <label htmlFor="companyName required"> {requireDiv} Insurance Company</label>
             </td>
@@ -91,39 +97,10 @@ const NewInsurance = ({ addInsurance, type }: any) => {
               />
             </td>
           </tr>
+
           <tr>
             <td>
-              <label htmlFor="effectiveDate">{requireDiv} Effective Date</label>
-            </td>
-            <td>
-              <Input
-                type="date"
-                placeholder={new Date(edited?.effective_date || new Date()).toDateString()}
-                onChange={handleChange}
-                name="effective_date"
-                id="effective_date"
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="expirationDate">{requireDiv} Expiration Date</label>
-            </td>
-            <td>
-              <Input
-                type="date"
-                placeholder={new Date(edited?.expiration_date || new Date()).toDateString()}
-                onChange={handleChange}
-                name="expiration_date"
-                id="expirationDate"
-                required
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="individualDeductable">{requireDiv} Individual Deductable</label>
+              <label htmlFor="individualDeductable">{requireDiv} Remaining Deductible</label>
             </td>
             <td>
               <Input
@@ -138,7 +115,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
           </tr>
           <tr>
             <td>
-              <label htmlFor="individualDeductableMet">{requireDiv} Individual Deductable Met</label>
+              <label htmlFor="individualDeductableMet">{requireDiv} Deductible </label>
             </td>
             <td>
               <Input
@@ -151,76 +128,8 @@ const NewInsurance = ({ addInsurance, type }: any) => {
               />
             </td>
           </tr>
-          <tr>
-            <td>
-              <label htmlFor="familyDeductable">Family Deductable</label>
-            </td>
-            <td>
-              <Input
-                type="number"
-                min={0}
-                defaultValue={edited.family_deductable}
-                onChange={handleChange}
-                name="family_deductable"
-                id="familyDeductable"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="familyDeductableMet">Family Deductable Met</label>
-            </td>
-            <td>
-              <Input
-                type="number"
-                min={0}
-                onChange={handleChange}
-                defaultValue={edited.family_deductable_Met}
-                name="family_deductable_Met"
-                id="familyDeductableMet"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="start_meeting_deductable">Do visits start while meeting the deductable</label>
-            </td>
-            <td>
-              <select
-                name="start_meeting_deductable"
-                defaultValue={edited.start_meeting_deductable}
-                id="start_meeting_deductable"
-              >
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-                <option value="n/a">Not applicable</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <label htmlFor="optionsForBenefits">Benefits based on</label>
-            </td>
-            <td>
-              <select
-                name="benefitsBaase"
-                onChange={handleBenefitsType}
-                defaultValue={edited?.benefitsBase?.type}
-                id="optionsForBenefits"
-              >
-                <option value="Benefit">Benefit Year</option>
-                <option value="Calendar">Calendar Year</option>
-              </select>
-              {edited?.benefitsBase?.type === "Benefit" && (
-                <Input
-                  onChange={handleBenefitsDate}
-                  placeholder={new Date(edited?.benefitsBase?.date || new Date()).toDateString()}
-                  type="date"
-                />
-              )}
-            </td>
-          </tr>
-          <tr>
+
+          {/* <tr>
             <td>Number of Visits allowed</td>
             <td>
               <Input
@@ -245,7 +154,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
                 id="visits_used"
               />
             </td>
-          </tr>
+          </tr> */}
 
           {/* <tr>
             <td>Co - Insurance</td>
@@ -256,7 +165,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
               </select>
             </td>
           </tr> */}
-          <tr>
+          {/* <tr>
             <td>Allowed Percentage</td>
             <td>
               <Input
@@ -281,8 +190,8 @@ const NewInsurance = ({ addInsurance, type }: any) => {
                 id="amount_max_per_visit"
               />
             </td>
-          </tr>
-          <tr>
+          </tr> */}
+          {/* <tr>
             <td>Visit Co Pay</td>
             <td>
               <Input
@@ -294,7 +203,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
                 id="visit_co_pay"
               />
             </td>
-            {/* <td>
+            <td>
               <select
                name="visit_co_pay"
                onChange={handleChange}
@@ -304,11 +213,11 @@ const NewInsurance = ({ addInsurance, type }: any) => {
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
-            </td> */}
-          </tr>
+            </td>
+          </tr> */}
 
 
-          <tr>
+          {/* <tr>
             <td>Exam Co Pay</td>
             <td>
               <Input
@@ -320,34 +229,36 @@ const NewInsurance = ({ addInsurance, type }: any) => {
                 id="exam_co_pay"
               />
             </td>
-            {/* <td>
+            <td>
               <select name="exam_co_pay" defaultValue={"no"} id="exam_co_pay">
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
-            </td> */}
-          </tr>
+            </td>
+          </tr> */}
 
-          {/* <tr>
+          <tr>
             <td>
-              <label htmlFor="xrayCoverage">X-ray coverage</label>
+              <label htmlFor="xrayCoverage">Office Visit 992XX</label>
             </td>
             <td>
               <select
-                name="x_ray_coverage"
+                name="office_visit_992XX"
                 onChange={handleChange}
-                defaultValue={edited?.x_ray_coverage}
+                defaultValue={edited?.office_visit_992XX}
                 id="xrayCoverage"
+                style={{width:"100%", padding:"6px 0", borderRadius:"2px"}}
               >
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-                <option value="n/a">Not Applicable</option>
+                <option value="covered">Covered</option>
+                <option value="non-covered">Non-covered</option>
+                <option value="co-insurance">Co-insurance</option>
+                <option value="co-pay">Co-pay</option>
               </select>
             </td>
-          </tr> */}
-          {/* {edited?.x_ray_coverage === "yes" && (
+          </tr>
+          {edited?.office_visit_992XX === "co-insurance" && (
             <tr>
-              <td>X-ray Percent coverage</td>
+              <td>Co-insurance</td>
               <td>
                 <Input
                   min={0}
@@ -360,18 +271,23 @@ const NewInsurance = ({ addInsurance, type }: any) => {
                 />
               </td>
             </tr>
-          )} */}
-          <tr>
-            <td>
-              <label htmlFor="xrayDeductable">X-rays subject to deductable</label>
-            </td>
-            <td>
-              <select name="x_rays_subject_to_deductable" defaultValue={"no"} id="xrayDeductable">
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-              </select>
-            </td>
-          </tr>
+          )}
+          {edited?.office_visit_992XX === "co-pay" && (
+            <tr>
+              <td>Co-pay</td>
+              <td>
+                <Input
+                  min={0}
+                  onChange={handleChange}
+                  defaultValue={edited?.x_ray_percent_coverage}
+                  type="number"
+                  name="x_ray_percent_coverage"
+                  id="x_ray_percent_coverage"
+                  required={edited?.x_ray_coverage === "yes"}
+                />
+              </td>
+            </tr>
+          )}
         </tbody>
         <Button type="primary" onClick={updateInsurance} loading={loading}>
           Save Insurance

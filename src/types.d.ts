@@ -61,10 +61,11 @@ export interface IInsurance {
   amount_max_per_visit: number | undefined;
   visit_co_pay: number;
   exam_co_pay: number;
-  co_insurance: "yes" | "no" | "n/a" | number; 
+  co_insurance: "yes" | "no" | "n/a" | number;
   x_ray_coverage: "yes" | "no" | "n/a";
   x_ray_percent_coverage: number;
   x_rays_subject_to_deductable: "yes" | "no";
+  office_visit_992XX: "covered" | "non-covered"|"co-insurance"|"co-pay";
 }
 
 export interface IUser {
@@ -309,5 +310,5 @@ export type FeeSchedule = {
   default: boolean;
 };
 
-export type CarePlanTemplate = {};
-export type PatientCarePlan = {};
+export type CarePlanTemplate = object; 
+export type PatientCarePlan = object;

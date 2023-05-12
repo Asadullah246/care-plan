@@ -140,8 +140,8 @@ export const caseType = ["Personal Injury", "Insurance", "Medicare", "Cash"];
 
 export const demoInsurance: IInsurance = {
   company: "red",
-  effective_date: new Date("1 Jan, 2022"),
-  expiration_date: new Date("31 Dec, 2022"),
+  // effective_date: new Date("1 Jan, 2022"),
+  // expiration_date: new Date("31 Dec, 2022"),
   exam_co_pay: 80,
   family_deductable: 3000,
   family_deductable_Met: 1000,
@@ -158,4 +158,5 @@ export const demoInsurance: IInsurance = {
   x_ray_coverage: "yes",
   x_ray_percent_coverage: 50,
   x_rays_subject_to_deductable: "yes",
+  office_visit_992XX:"covered",
 };
