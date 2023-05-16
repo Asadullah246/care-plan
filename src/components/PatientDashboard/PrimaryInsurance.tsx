@@ -67,11 +67,23 @@ export const PrimaryInsurance = ({ data, type }: any) => {
   if (loading) return <h2>Loading..</h2>
 
 
-  const editIns = (text:any) => {
+  const editIns = (text: any) => {
     setMode(text)
   }
 
-  console.log("ins",data, pid , insurance);
+  const getInsValue=(propertyName:any)=>{
+if(propertyName=="covered"){
+  return ""
+}
+else if(propertyName=="non_covered"){
+  return ""
+}
+else if(propertyName=="co_insurance"){
+  return
+}
+  }
+
+  console.log("ins", data, pid, insurance);
   return (
     <div>
       <Title level={3}>{type}</Title>
@@ -83,6 +95,11 @@ export const PrimaryInsurance = ({ data, type }: any) => {
               <table>
                 <tbody>
                   <tr>
+                    <td style={{fontWeight:"500", paddingBottom:"20px"}}>Name</td>
+                    <td style={{fontWeight:"500", paddingBottom:"20px"}}>Value</td>
+                    <td style={{fontWeight:"500", paddingBottom:"20px"}}>Visits Remaining</td>
+                  </tr>
+                  <tr>
                     <td>
                       <label htmlFor="companyName">Insurance Company</label>
                     </td>
@@ -90,7 +107,7 @@ export const PrimaryInsurance = ({ data, type }: any) => {
                       <Input style={{ width: "150px" }} type="text" name="company" value={insurance?.company} id="company" />
                     </td>
                   </tr>
-                  <tr>
+                  {/* <tr>
                     <td>
                       <label htmlFor="effectiveDate">Effective Date</label>
                     </td>
@@ -119,14 +136,31 @@ export const PrimaryInsurance = ({ data, type }: any) => {
                         readOnly
                       />
                     </td>
-                  </tr>
+                  </tr> */}
+
                   <tr>
                     <td>
-                      <label htmlFor="individualDeductable">Individual Deductable</label>
+                      <label htmlFor="individualDeductableMet">Remaining Deductible</label>
                     </td>
                     <td>
                       <InputNumber
-                      readOnly
+                        readOnly
+                        style={{ width: "150px" }}
+                        defaultValue={insurance?.remaining_deductable}
+                        name="remaining_deductable"
+                        id="individualDeductableMet"
+                      />
+                    </td>
+                    {/* <span style={{fontWeight:"500", paddingRight:"6px"}}>Deductable Left: ${insurance?.individual_deductable - insurance?.individual_deductable_Met}</span> */}
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <label htmlFor="individualDeductable">Deductible</label>
+                    </td>
+                    <td>
+                      <InputNumber
+                        readOnly
                         style={{ width: "150px" }}
                         name="individual_deductable"
                         defaultValue={insurance?.individual_deductable}
@@ -134,28 +168,13 @@ export const PrimaryInsurance = ({ data, type }: any) => {
                       />
                     </td>
                   </tr>
-                  <tr>
-                    <td>
-                      <label htmlFor="individualDeductableMet">Individual Deductable Met</label>
-                    </td>
-                    <td>
-                      <InputNumber
-                      readOnly
-                        style={{ width: "150px" }}
-                        defaultValue={insurance?.individual_deductable_Met}
-                        name="individual_deductable_Met"
-                        id="individualDeductableMet"
-                      />
-                    </td>
-                    <span>Deductable Left: ${insurance?.individual_deductable - insurance?.individual_deductable_Met}</span>
-                  </tr>
-                  <tr>
+                  {/* <tr>
                     <td>
                       <label htmlFor="familyDeductable">Family Deductable</label>
                     </td>
                     <td>
                       <InputNumber
-                      readOnly
+                        readOnly
                         style={{ width: "150px" }}
                         defaultValue={insurance?.family_deductable}
                         name="family_deductable"
@@ -169,7 +188,7 @@ export const PrimaryInsurance = ({ data, type }: any) => {
                     </td>
                     <td>
                       <InputNumber
-                      readOnly
+                        readOnly
                         style={{ width: "150px" }}
                         defaultValue={insurance?.family_deductable_Met}
                         name="family_deductable_Met"
@@ -177,14 +196,14 @@ export const PrimaryInsurance = ({ data, type }: any) => {
 
                       />
                     </td>
-                    <span>Family Deductable Left: ${insurance?.family_deductable - insurance?.family_deductable_Met}</span>
-                  </tr>
-                  <tr>
+                    <span style={{fontWeight:"500", paddingRight:"6px"}}>Family Deductable Left: ${insurance?.family_deductable - insurance?.family_deductable_Met}</span>
+                  </tr> */}
+                  {/* <tr>
                     <td>
                       <label htmlFor="start_meeting_deductable">Do visits start while meeting the deductable</label>
                     </td>
                     <td>
-                      <span>{insurance?.start_meeting_deductable}</span>
+                      <span style={{fontWeight:"500", paddingRight:"6px"}}>{insurance?.start_meeting_deductable}</span>
                     </td>
                   </tr>
                   <tr>
@@ -192,24 +211,111 @@ export const PrimaryInsurance = ({ data, type }: any) => {
                       <label htmlFor="optionsForBenefits">Benefits based on</label>
                     </td>
                     <td>
-                      <select name="benefitsBaase" defaultValue={insurance?.benefitsBase?.type}  id="optionsForBenefits">
+                      <select name="benefitsBaase" defaultValue={insurance?.benefitsBase?.type} id="optionsForBenefits">
                         <option value="Benefit">Benefit Year</option>
                         <option value="Calendar">Calendar Year</option>
                       </select>
                       {insurance?.benefitsBase?.type === "Benefit" && (
                         <Input
-                        readOnly
+                          readOnly
                           style={{ width: "150px" }}
                           value={new Date(insurance?.benefitsBase?.date || new Date()).toDateString()}
                         />
                       )}
                     </td>
-                  </tr>
+                  </tr> */}
+
+                  {/* office visits  */}
                   <tr>
+                    <td>
+                      <label htmlFor="xrayCoverage">Office Visit 992XX</label>
+                    </td>
+                    <td>
+
+
+                       {insurance?.office_visit_992XX=="co_insurance"? <span style={{fontWeight:"500", paddingRight:"6px"}}>{insurance.office_visit_co_insurance}%</span>  :insurance?.office_visit_992XX=="co_pay"? <span style={{fontWeight:"500", paddingRight:"6px"}} >{insurance.office_visit_co_pay}%</span>  :""}  {insurance?. office_visit_992XX}
+                    </td>
+
+                  </tr>
+
+                  {/* Chiro Benefit 989XX */}
+
+                  <tr>
+                    <td>
+                      <label htmlFor="xrayCoverage"> Chiro Benefit 989XX</label>
+                    </td>
+                    <td>
+
+                    {insurance?.chiro_benefit_989XX=="co_insurance"? <span style={{fontWeight:"500", paddingRight:"6px"}}>{insurance.chiro_benefit_co_insurance}%</span>  :insurance?.chiro_benefit_989XX=="co_pay"? <span style={{fontWeight:"500", paddingRight:"6px"}} >{insurance.chiro_benefit_co_pay}%</span>  :""}  {insurance?. chiro_benefit_989XX}
+
+                    </td>
+
+                    <td>
+                      <Input
+                        min={0}
+                        readOnly
+                        defaultValue={insurance?.chiro_benefit_remaining}
+                        type="number"
+                        name="chiro_benefit_remaining"
+                        id="x_ray_percent_coverage"
+                        required
+                      />
+                    </td>
+                  </tr>
+
+                  {/* Physical Therapy 97XXX */}
+
+                  <tr>
+                    <td>
+                      <label htmlFor="xrayCoverage"> Physical Therapy 97XXX</label>
+                    </td>
+                    <td>
+                    {insurance?.physical_therapy_97XXX=="co_insurance"? <span style={{fontWeight:"500", paddingRight:"6px"}}>{insurance.physical_therapy_co_insurance}%</span>  :insurance?.physical_therapy_97XXX=="co_pay"? <span style={{fontWeight:"500", paddingRight:"6px"}} >{insurance.physical_therapy_co_pay}%</span>  :""}  {insurance?. physical_therapy_97XXX}
+                    </td>
+
+                    <td>
+                      <Input
+                        min={0}
+                        // onChange={handleChange}
+                        defaultValue={insurance?.physical_therapy_remaining}
+                        type="number"
+                        name="physical_therapy_remaining"
+                        id="x_ray_percent_coverage"
+                        required
+                      />
+                    </td>
+                  </tr>
+
+
+
+                  {/* Diagnostic 72XXX */}
+
+                  <tr>
+                    <td>
+                      <label htmlFor="xrayCoverage">Diagnostic 72XXX</label>
+                    </td>
+                    <td style={{whiteSpace:"nowrap"}}>
+                    {insurance?.diagnostic_72XXX=="co_insurance"? <span style={{fontWeight:"500", paddingRight:"6px"}}>{insurance.diagnostic_co_insurance}%</span>  :insurance?.diagnostic_72XXX=="co_pay"? <span style={{fontWeight:"500", paddingRight:"6px"}} >{insurance.diagnostic_co_pay}%</span>  :""}  {insurance?. diagnostic_72XXX}
+                    </td>
+
+                    <td>
+                      <Input
+                        min={0}
+                        // onChange={handleChange}
+                        defaultValue={insurance?.diagnostic_remaining}
+                        type="number"
+                        name="diagnostic_remaining"
+                        id="x_ray_percent_coverage"
+                        required
+                      />
+                    </td>
+                  </tr>
+
+                  {/* <tr>
                     <td>Number of Visits allowed</td>
                     <td>
                       <InputNumber
-                      readOnly
+                        readOnly
                         style={{ width: "150px" }}
                         min={0}
                         defaultValue={insurance?.visits_allowed}
@@ -222,7 +328,7 @@ export const PrimaryInsurance = ({ data, type }: any) => {
                     <td>Number of Visits used</td>
                     <td>
                       <InputNumber
-                      readOnly
+                        readOnly
                         style={{ width: "150px" }}
                         min={0}
                         defaultValue={insurance?.visits_used}
@@ -236,7 +342,7 @@ export const PrimaryInsurance = ({ data, type }: any) => {
                     <td>Allowed Percentage</td>
                     <td>
                       <InputNumber
-                      readOnly
+                        readOnly
                         style={{ width: "150px" }}
                         min={0}
                         defaultValue={insurance?.allowed_percentage}
@@ -249,7 +355,7 @@ export const PrimaryInsurance = ({ data, type }: any) => {
                     <td>Amount Max per visit</td>
                     <td>
                       <InputNumber
-                      readOnly
+                        readOnly
                         style={{ width: "150px" }}
                         min={0}
                         defaultValue={insurance?.amount_max_per_visit}
@@ -257,44 +363,44 @@ export const PrimaryInsurance = ({ data, type }: any) => {
                         id="amount_max_per_visit"
                       />
                     </td>
-                  </tr>
+                  </tr> */}
                   <tr>
-                    <td>Visit Co Pay</td>
+                    {/* <td>Visit Co Pay</td> */}
                     {/* <td>
             <select name="visit_co_pay" disabled defaultValue={insurance?.visit_co_pay} id="visit_co_pay">
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
           </td> */}
-                    <td>
+                    {/* <td>
                       <InputNumber
-                      readOnly
+                        readOnly
                         style={{ width: "150px" }}
                         min={0}
                         defaultValue={insurance?.visit_co_pay}
                         name="visit_co_pay"
                         id="visit_co_pay"
                       />
-                    </td>
+                    </td> */}
                   </tr>
                   <tr>
-                    <td>Exam Co Pay</td>
+                    {/* <td>Exam Co Pay</td> */}
                     {/* <td>
             <select name="exam_co_pay" disabled defaultValue={insurance?.exam_co_pay} id="exam_co_pay">
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
           </td> */}
-                    <td>
+                    {/* <td>
                       <InputNumber
-                      readOnly
+                        readOnly
                         style={{ width: "150px" }}
                         min={0}
                         name="exam_co_pay"
                         defaultValue={insurance?.exam_co_pay}
                         id="exam_co_pay"
                       />
-                    </td>
+                    </td> */}
                   </tr>
                   <tr>
                     {/* <td>Co - Insurance</td> */}
@@ -333,7 +439,7 @@ export const PrimaryInsurance = ({ data, type }: any) => {
             </td>
           </tr>
         )} */}
-                  <tr>
+                  {/* <tr>
                     <td>
                       <label htmlFor="xrayDeductable">X-rays subject to deductable</label>
                     </td>
@@ -347,16 +453,16 @@ export const PrimaryInsurance = ({ data, type }: any) => {
                         <option value="no">No</option>
                       </select>
                     </td>
-                  </tr>
+                  </tr> */}
                 </tbody>
               </table>
-              <button style={{backgroundColor:"transparent", padding:"3px 10px", borderRadius:"2px", cursor:"pointer",marginTop:"20px"}} onClick={()=>editIns("edit")} >
+              <button style={{ backgroundColor: "transparent", padding: "3px 10px", borderRadius: "2px", cursor: "pointer", marginTop: "20px" }} onClick={() => editIns("edit")} >
                 Edit Insurance
               </button>
             </>
 
               : <>
-              <EditInsurance insurance={insurance} id={pid} mode={mode} setMode={setMode} loadData={loadData}></EditInsurance>
+                <EditInsurance insurance={insurance} id={pid} mode={mode} setMode={setMode} loadData={loadData}></EditInsurance>
 
               </>}
 

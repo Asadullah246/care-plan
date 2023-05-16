@@ -92,7 +92,7 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
               />
             </td>
           </tr>
-          <tr>
+          {/* <tr>
             <td>
               <label htmlFor="effectiveDate">{requireDiv} Effective Date</label>
             </td>
@@ -121,10 +121,26 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
                 required
               />
             </td>
+          </tr> */}
+
+          <tr>
+            <td>
+              <label htmlFor="individualDeductableMet">{requireDiv} Remaining Deductible </label>
+            </td>
+            <td>
+              <Input
+                type="number"
+                min={0}
+                defaultValue={edited.remaining_deductable}
+                onChange={handleChange}
+                name="remaining_deductable"
+                id="individualDeductableMet"
+              />
+            </td>
           </tr>
           <tr>
             <td>
-              <label htmlFor="individualDeductable">{requireDiv} Individual Deductable</label>
+              <label htmlFor="individualDeductable">{requireDiv} Deductible</label>
             </td>
             <td>
               <Input
@@ -137,22 +153,268 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
               />
             </td>
           </tr>
-          <tr>
+
+             {/* office visits  */}
+             <tr>
             <td>
-              <label htmlFor="individualDeductableMet">{requireDiv} Individual Deductable Met</label>
+              <label htmlFor="xrayCoverage">{requireDiv} Office Visit 992XX</label>
             </td>
             <td>
-              <Input
-                type="number"
-                min={0}
-                defaultValue={edited.individual_deductable_Met}
+              <select
+                name="office_visit_992XX"
                 onChange={handleChange}
-                name="individual_deductable_Met"
-                id="individualDeductableMet"
+                defaultValue={edited?.office_visit_992XX}
+                id="xrayCoverage"
+                style={{ width: "100%", padding: "6px 0", borderRadius: "2px" }}
+              >
+                <option value="covered">Covered</option>
+                <option value="non_covered">Non-covered</option>
+                <option value="co_insurance">Co-insurance</option>
+                <option value="co_pay">Co-pay</option>
+              </select>
+            </td>
+
+          </tr>
+
+          {edited?.office_visit_992XX === "co_insurance" && (
+            <tr>
+              <td>{requireDiv} Co-insurance</td>
+              <td>
+                <Input
+                  min={0}
+                  onChange={handleChange}
+                  defaultValue={edited?.office_visit_co_insurance}
+                  type="number"
+                  name="office_visit_co_insurance"
+                  id="x_ray_percent_coverage"
+                  required={edited?.office_visit_992XX === "co_insurance"}
+                />
+              </td>
+            </tr>
+          )}
+          {edited?.office_visit_992XX === "co_pay" && (
+            <tr>
+              <td>{requireDiv} Co-pay</td>
+              <td>
+                <Input
+                  min={0}
+                  onChange={handleChange}
+                  defaultValue={edited?.office_visit_co_pay}
+                  type="number"
+                  name="office_visit_co_pay"
+                  id="x_ray_percent_coverage"
+                  required={edited?.office_visit_992XX === "co_pay"}
+                />
+              </td>
+            </tr>
+          )}
+
+
+          {/* Chiro Benefit 989XX */}
+
+          <tr>
+            <td>
+              <label htmlFor="xrayCoverage">{requireDiv} Chiro Benefit 989XX</label>
+            </td>
+            <td>
+              <select
+                name="chiro_benefit_989XX"
+                onChange={handleChange}
+                defaultValue={edited?.chiro_benefit_989XX}
+                id="xrayCoverage"
+                style={{ width: "100%", padding: "6px 0", borderRadius: "2px" }}
+              >
+                <option value="covered">Covered</option>
+                <option value="non_covered">Non-covered</option>
+                <option value="co_insurance">Co-insurance</option>
+                <option value="co_pay">Co-pay</option>
+              </select>
+            </td>
+
+            <td>
+              <Input
+                min={0}
+                onChange={handleChange}
+                defaultValue={edited?.chiro_benefit_remaining}
+                type="number"
+                name="chiro_benefit_remaining"
+                id="x_ray_percent_coverage"
+                required
               />
             </td>
           </tr>
+
+          {edited?.chiro_benefit_989XX === "co_insurance" && (
+            <tr>
+              <td>{requireDiv} Co-insurance</td>
+              <td>
+                <Input
+                  min={0}
+                  onChange={handleChange}
+                  defaultValue={edited?.chiro_benefit_co_insurance}
+                  type="number"
+                  name="chiro_benefit_co_insurance"
+                  id="x_ray_percent_coverage"
+                  required={edited?.chiro_benefit_989XX === "co_insurance"}
+                />
+              </td>
+            </tr>
+          )}
+          {edited?.chiro_benefit_989XX === "co_pay" && (
+            <tr>
+              <td>{requireDiv} Co-pay</td>
+              <td>
+                <Input
+                  min={0}
+                  onChange={handleChange}
+                  defaultValue={edited?.chiro_benefit_co_pay}
+                  type="number"
+                  name="chiro_benefit_co_pay"
+                  id="x_ray_percent_coverage"
+                  required={edited?.chiro_benefit_989XX === "co_pay"}
+                />
+              </td>
+            </tr>
+          )}
+
+          {/* Physical Therapy 97XXX */}
+
           <tr>
+            <td>
+              <label htmlFor="xrayCoverage">{requireDiv} Physical Therapy 97XXX</label>
+            </td>
+            <td>
+              <select
+                name="physical_therapy_97XXX"
+                onChange={handleChange}
+                defaultValue={edited?.physical_therapy_97XXX}
+                id="xrayCoverage"
+                style={{ width: "100%", padding: "6px 0", borderRadius: "2px" }}
+              >
+                <option value="covered">Covered</option>
+                <option value="non_covered">Non-covered</option>
+                <option value="co_insurance">Co-insurance</option>
+                <option value="co_pay">Co-pay</option>
+              </select>
+            </td>
+
+            <td>
+              <Input
+                min={0}
+                onChange={handleChange}
+                defaultValue={edited?.physical_therapy_remaining}
+                type="number"
+                name="physical_therapy_remaining"
+                id="x_ray_percent_coverage"
+                required
+              />
+            </td>
+          </tr>
+
+          {edited?.physical_therapy_97XXX === "co_insurance" && (
+            <tr>
+              <td>{requireDiv} Co-insurance</td>
+              <td>
+                <Input
+                  min={0}
+                  onChange={handleChange}
+                  defaultValue={edited?.physical_therapy_co_insurance}
+                  type="number"
+                  name="physical_therapy_co_insurance"
+                  id="x_ray_percent_coverage"
+                  required={edited?.physical_therapy_97XXX === "co_insurance"}
+                />
+              </td>
+            </tr>
+          )}
+          {edited?.physical_therapy_97XXX === "co_pay" && (
+            <tr>
+              <td>{requireDiv} Co-pay</td>
+              <td>
+                <Input
+                  min={0}
+                  onChange={handleChange}
+                  defaultValue={edited?.physical_therapy_co_pay}
+                  type="number"
+                  name="physical_therapy_co_pay"
+                  id="x_ray_percent_coverage"
+                  required={edited?.physical_therapy_97XXX === "co_pay"}
+                />
+              </td>
+            </tr>
+          )}
+
+
+          {/* Diagnostic 72XXX */}
+
+          <tr>
+            <td>
+              <label htmlFor="xrayCoverage">{requireDiv} Diagnostic 72XXX</label>
+            </td>
+            <td>
+              <select
+                name="diagnostic_72XXX"
+                onChange={handleChange}
+                defaultValue={edited?.diagnostic_72XXX}
+                id="xrayCoverage"
+                style={{ width: "100%", padding: "6px 0", borderRadius: "2px" }}
+              >
+                <option value="covered">Covered</option>
+                <option value="non_covered">Non-covered</option>
+                <option value="co_insurance">Co-insurance</option>
+                <option value="co_pay">Co-pay</option>
+              </select>
+            </td>
+
+            <td>
+              <Input
+                min={0}
+                onChange={handleChange}
+                defaultValue={edited?.diagnostic_remaining}
+                type="number"
+                name="diagnostic_remaining"
+                id="x_ray_percent_coverage"
+                required
+              />
+            </td>
+          </tr>
+
+          {edited?.diagnostic_72XXX === "co_insurance" && (
+            <tr>
+              <td>{requireDiv} Co-insurance</td>
+              <td>
+                <Input
+                  min={0}
+                  onChange={handleChange}
+                  defaultValue={edited?.diagnostic_co_insurance}
+                  type="number"
+                  name="diagnostic_co_insurance"
+                  id="x_ray_percent_coverage"
+                  required={edited?.physical_therapy_97XXX === "co_insurance"}
+                />
+              </td>
+            </tr>
+          )}
+          {edited?.diagnostic_72XXX === "co_pay" && (
+            <tr>
+              <td>{requireDiv} Co-pay</td>
+              <td>
+                <Input
+                  min={0}
+                  onChange={handleChange}
+                  defaultValue={edited?.diagnostic_co_pay}
+                  type="number"
+                  name="diagnostic_co_pay"
+                  id="x_ray_percent_coverage"
+                  required={edited?.physical_therapy_97XXX === "co_pay"}
+                />
+              </td>
+            </tr>
+          )} 
+
+
+
+          {/* <tr>
             <td>
               <label htmlFor="familyDeductable">Family Deductable</label>
             </td>
@@ -181,8 +443,8 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
                 id="familyDeductableMet"
               />
             </td>
-          </tr>
-          <tr>
+          </tr> */}
+          {/* <tr>
             <td>
               <label htmlFor="start_meeting_deductable">Do visits start while meeting the deductable</label>
             </td>
@@ -220,8 +482,8 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
                 />
               )}
             </td>
-          </tr>
-          <tr>
+          </tr> */}
+          {/* <tr>
             <td>Number of Visits allowed</td>
             <td>
               <Input
@@ -246,7 +508,7 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
                 id="visits_used"
               />
             </td>
-          </tr>
+          </tr> */}
 
           {/* <tr>
             <td>Co - Insurance</td>
@@ -257,7 +519,7 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
               </select>
             </td>
           </tr> */}
-          <tr>
+          {/* <tr>
             <td>Allowed Percentage</td>
             <td>
               <Input
@@ -282,8 +544,8 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
                 id="amount_max_per_visit"
               />
             </td>
-          </tr>
-          <tr>
+          </tr> */}
+          {/* <tr>
             <td>Visit Co Pay</td>
             <td>
               <Input
@@ -295,7 +557,7 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
                 id="visit_co_pay"
               />
             </td>
-            {/* <td>
+            <td>
               <select
                name="visit_co_pay"
                onChange={handleChange}
@@ -305,11 +567,11 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
-            </td> */}
-          </tr>
+            </td>
+          </tr> */}
 
 
-          <tr>
+          {/* <tr>
             <td>Exam Co Pay</td>
             <td>
               <Input
@@ -321,13 +583,13 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
                 id="exam_co_pay"
               />
             </td>
-            {/* <td>
+            <td>
               <select name="exam_co_pay" defaultValue={"no"} id="exam_co_pay">
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
               </select>
-            </td> */}
-          </tr>
+            </td>
+          </tr> */}
 
           {/* <tr>
             <td>
@@ -362,7 +624,7 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
               </td>
             </tr>
           )} */}
-          <tr>
+          {/* <tr>
             <td>
               <label htmlFor="xrayDeductable">X-rays subject to deductable</label>
             </td>
@@ -372,16 +634,16 @@ const EditInsurance = ({ insurance, id, mode, setMode, loadData }: any) => {
                 <option value="no">No</option>
               </select>
             </td>
-          </tr>
+          </tr> */}
         </tbody>
-       <div style={{paddingTop:"20px"}}> 
-       <Button type="primary" onClick={updateInsurance} loading={loading}>
-          Save Insurance
-        </Button>
-        <button style={{ backgroundColor: "transparent", border: "none", borderRadius: "2px", cursor: "pointer", marginLeft: "25px" }} onClick={() => setMode("pri")} >
-          cancel
-        </button>
-       </div>
+        <div style={{ paddingTop: "20px" }}>
+          <Button type="primary" onClick={updateInsurance} loading={loading}>
+            Save Insurance
+          </Button>
+          <button style={{ backgroundColor: "transparent", border: "none", borderRadius: "2px", cursor: "pointer", marginLeft: "25px" }} onClick={() => setMode("pri")} >
+            cancel
+          </button>
+        </div>
       </table>
     </form>
   );

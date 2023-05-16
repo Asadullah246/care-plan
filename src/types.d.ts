@@ -61,11 +61,29 @@ export interface IInsurance {
   amount_max_per_visit: number | undefined;
   visit_co_pay: number;
   exam_co_pay: number;
-  co_insurance: "yes" | "no" | "n/a" | number;
+
   x_ray_coverage: "yes" | "no" | "n/a";
   x_ray_percent_coverage: number;
   x_rays_subject_to_deductable: "yes" | "no";
-  office_visit_992XX: "covered" | "non-covered"|"co-insurance"|"co-pay";
+
+  remaining_deductable:number;
+  deductable:number;
+  office_visit_992XX: "covered" | "non_covered"|"co_insurance"|"co_pay";
+  office_visit_remaining:number;
+  office_visit_co_pay:number;
+  office_visit_co_insurance: number;
+  chiro_benefit_989XX:"covered" | "non_covered"|"co_insurance"|"co_pay";
+  chiro_benefit_remaining:number;
+  chiro_benefit_co_insurance:number;
+  chiro_benefit_co_pay:number;
+  physical_therapy_97XXX:"covered" | "non_covered"|"co_insurance"|"co_pay";
+  physical_therapy_remaining:number;
+  physical_therapy_co_insurance:number;
+  physical_therapy_co_pay:number;
+  diagnostic_remaining:number;
+  diagnostic_72XXX:"covered" | "non_covered"|"co_insurance"|"co_pay"
+  diagnostic_co_insurance:number;
+  diagnostic_co_pay:number;
 }
 
 export interface IUser {
@@ -310,5 +328,5 @@ export type FeeSchedule = {
   default: boolean;
 };
 
-export type CarePlanTemplate = object; 
+export type CarePlanTemplate = object;
 export type PatientCarePlan = object;
