@@ -345,7 +345,7 @@ const NewInsurance = ({ addInsurance, type }: any) => {
               </select>
             </td>
 
-            <td>
+            {/* <td>
               <Input
                 min={0}
                 onChange={handleChange}
@@ -353,9 +353,9 @@ const NewInsurance = ({ addInsurance, type }: any) => {
                 type="number"
                 name="diagnostic_remaining"
                 id="x_ray_percent_coverage"
-                required
+                required 
               />
-            </td>
+            </td> */}
           </tr>
 
           {edited?.diagnostic_72XXX === "co_insurance" && (

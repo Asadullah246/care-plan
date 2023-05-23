@@ -299,18 +299,18 @@ else if(propertyName=="co_insurance"){
                     {insurance?.diagnostic_72XXX=="co_insurance"? <span style={{fontWeight:"500", paddingRight:"6px"}}>{insurance.diagnostic_co_insurance}%</span>  :insurance?.diagnostic_72XXX=="co_pay"? <span style={{fontWeight:"500", paddingRight:"6px"}} >{insurance.diagnostic_co_pay}%</span>  :""}  {insurance?. diagnostic_72XXX}
                     </td>
 
-                    <td>
+                    {/* <td>
                       <Input
                         min={0}
                         readOnly
-                        // onChange={handleChange}
                         defaultValue={insurance?.diagnostic_remaining}
                         type="number"
                         name="diagnostic_remaining"
                         id="x_ray_percent_coverage"
                         required
                       />
-                    </td>
+                    </td> */}
+                    
                   </tr>
 
                   {/* <tr>
