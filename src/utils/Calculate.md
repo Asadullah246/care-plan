@@ -27,7 +27,7 @@
   user cost = 850
   insurance coverage = 1025
   total cost = 1875
-  
+
 # Demo plan 2
   green, 25, 600, 80, 80
   - $45, $40, 36x => insuranceCovered = 25 x 40 = 1000,
@@ -43,3 +43,62 @@
   user cost = 915
   insurance coverage = 960
   total cost = 1875
+
+
+  ins:
+
+  
+  chiro_benefit_989XX
+:
+"co_pay"
+chiro_benefit_co_pay
+:
+30
+chiro_benefit_remaining
+:
+36
+company
+:
+"Powercode"
+createdAt
+:
+"2023-05-22T10:37:15.953Z"
+diagnostic_72XXX
+:
+"co_insurance"
+diagnostic_co_insurance
+:
+15
+diagnostic_remaining
+:
+25
+id
+:
+"646b45dbaebf4f0f6c9f3517"
+individual_deductable
+:
+5000
+office_visit_992XX
+:
+"co_insurance"
+office_visit_co_insurance
+:
+10
+physical_therapy_97XXX
+:
+"co_insurance"
+physical_therapy_co_insurance
+:
+10
+physical_therapy_remaining
+:
+30
+remaining_deductable
+:
+2000
+updatedAt
+:
+"2023-05-22T10:37:15.953Z"
+_id
+:
+"646b45dbaebf4f0f6c9f3517"

@@ -47,7 +47,7 @@ const PatientInfo = () => {
                 >
                     {patient ? (<DatePicker
                         name="dob"
-                        defaultValue={moment(`${patient?.dob.slice(5, 7)}/${patient?.dob.slice(8, 10)}/${patient?.dob.slice(0, 4)}`, "MM/DD/YYYY")}
+                        defaultValue={moment(`${patient?.dob?.slice(5, 7)}/${patient?.dob?.slice(8, 10)}/${patient?.dob.slice(0, 4)}`, "MM/DD/YYYY")}
                         format={"MM-DD-YYYY"}
                     />) : 'Loading...'}
                 </Form.Item>

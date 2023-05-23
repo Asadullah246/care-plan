@@ -277,6 +277,7 @@ else if(propertyName=="co_insurance"){
                       <Input
                         min={0}
                         // onChange={handleChange}
+                        readOnly
                         defaultValue={insurance?.physical_therapy_remaining}
                         type="number"
                         name="physical_therapy_remaining"
@@ -301,6 +302,7 @@ else if(propertyName=="co_insurance"){
                     <td>
                       <Input
                         min={0}
+                        readOnly
                         // onChange={handleChange}
                         defaultValue={insurance?.diagnostic_remaining}
                         type="number"

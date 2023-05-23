@@ -1,5 +1,5 @@
 import store from "../store/store";
-import { adjustment1, codeStruct, ICareplan, IInsurance } from "../types";
+import { adjustment1, codeStruct, exam1, ICareplan, IInsurance } from "../types";
 import { Data } from "./interface";
 
 // get covered visits
@@ -315,7 +315,6 @@ export const insuranceCalculation = (
   const storeData = store.getState();
   // console.log("store data ", { storeData });
   const insurance = storeData.patient.insurance;
-  console.log("client plan", clientPlan);
 
   console.log("ins", insurance);
 
@@ -340,8 +339,7 @@ export const insuranceCalculation = (
 
   // deductableLeft
 
-  const deductableLeft =
-    insurance.individual_deductable - insurance.individual_deductable_Met;
+  const deductableLeft =insurance.remaining_deductable;
 
   // const co_insurance_persantage = insurance.allowed_percentage;
   if (!clientPlan.carePlan)
@@ -632,11 +630,23 @@ const getCodeCost = (
 ) => {
   // console.log(feeSchedule, defaultFS,insurance);
   const deductableLeft =
-    Number(insurance.individual_deductable) -
-    Number(insurance.individual_deductable_Met);
-  const visit =
-    Number(insurance.visits_allowed) - Number(insurance.visits_used);
-  if (usedVisits > visit) {
+    Number(insurance.remaining_deductable);
+  // const deductableLeft =
+  //   Number(insurance.individual_deductable) -
+  //   Number(insurance.individual_deductable_Met);
+
+  // there have 3 kind of visits
+
+  // 992 = exam
+  // 989= adjustment
+  // 97=  therapy
+  // 72= x-rays
+const usingVisits=usedVisits
+const chiroBenefit989=insurance.chiro_benefit_remaining
+const physicalTherapy97=insurance.physical_therapy_remaining
+const diagnostic72=insurance.diagnostic_remaining || 0
+
+  if (usedVisits > chiroBenefit989) {
     alert("Insurance visit shouldn't be greater than remaining visit");
   }
 
@@ -651,31 +661,54 @@ const getCodeCost = (
           code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
 
         if (
-          insurance?.exam_co_pay != null &&
-          insurance?.exam_co_pay > 0 &&
+          insurance.office_visit_992XX === "co_pay" &&
           i <= usedVisits
         ) {
-          const amount = insurance.exam_co_pay;
+          if(!insurance.office_visit_co_pay){
+            alert("office visits co-pay amount not found")
+            return
+          }
+          const amount = insurance.office_visit_co_pay;
 
           const saved = Number(mainAmount) - Number(amount);
           if (!isNaN(saved)) {
             return { amount, saved };
           }
-        } else if (
-          // insurance.co_insurance === "yes"
-          insurance.allowed_percentage &&
-          insurance.allowed_percentage >= 0 &&
+        }
+        else if (
+          insurance.office_visit_992XX === "co_insurance" &&
+          i <= usedVisits &&
           deductableMet >= deductableLeft
         ) {
+          if(!insurance.office_visit_co_insurance){
+          alert("office visits co-pay amount not found")
+          return ;
+        }
           const totalAmount =
             code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
-          const amount = (totalAmount * insurance.allowed_percentage) / 100;
+          const amount = (totalAmount * insurance.office_visit_co_insurance) / 100;
 
           const saved = Number(mainAmount) - Number(amount);
           if (!isNaN(saved)) {
             return { amount, saved };
           }
-        } else {
+        }
+        else if (
+          insurance.office_visit_992XX === "covered" &&
+          i <= usedVisits &&
+          deductableMet >= deductableLeft
+        ) {
+       
+          const totalAmount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          const amount = (totalAmount * insurance.office_visit_co_insurance) / 100;
+
+          const saved = Number(mainAmount) - Number(amount);
+          if (!isNaN(saved)) {
+            return { amount, saved };
+          }
+        }
+        else {
           const amount =
             code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
           const saved = Number(mainAmount) - Number(amount);
@@ -811,7 +844,7 @@ const getCodeCost = (
 
       if (
         insurance.visit_co_pay != null &&
-        insurance.visit_co_pay > 0 && 
+        insurance.visit_co_pay > 0 &&
         i <= usedVisits
       ) {
         const amount = insurance.visit_co_pay;
