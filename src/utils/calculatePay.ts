@@ -481,6 +481,7 @@ export const insuranceCalculation = (
 
     calculations.insuranceCoverage += currentVisitSaved;
   }
+  console.log("total", calculations); 
   const defaultFullCost = getDefaultFullCost(
     codeList,
     clientPlan.carePlan,
@@ -678,7 +679,7 @@ const getCodeCost = (
           deductableMet >= deductableLeft
         ) {
           if (!insurance.office_visit_co_insurance) {
-            alert("office visits co-pay amount not found");
+            alert("office visits co-insurance amount not found");
             return;
           }
           const totalAmount =
@@ -725,7 +726,7 @@ const getCodeCost = (
               alert("diagnostic co-pay amount not found");
               return;
             }
-            const amount = insurance.diagnostic_pay;
+            const amount = insurance.diagnostic_co_pay;
             const saved = Number(mainAmount) - Number(amount);
             if (!isNaN(saved)) {
               return { amount, saved };
@@ -736,7 +737,7 @@ const getCodeCost = (
             deductableMet >= deductableLeft
           ) {
             if (!insurance.diagnostic_co_insurance) {
-              alert("diagnostic co-pay amount not found");
+              alert("diagnostic co-insurance amount not found");
               return;
             }
             const totalAmount =
@@ -857,7 +858,7 @@ const getCodeCost = (
         //     return { amount: 0, saved: 0 };
         //   }
         // }
-      } else { 
+      } else {
         return { amount: 0, saved: 0 };
       }
     } else if (itemName == "therapies" && codeItem.visits.length > 0) {
@@ -867,20 +868,66 @@ const getCodeCost = (
           code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
         if (
           // insurance.co_insurance === "yes" &&
-          insurance.allowed_percentage &&
-          insurance.allowed_percentage >= 0 &&
-          deductableMet >= deductableLeft
+          visits == usedVisits &&
+          usedVisits == insurance.chiro_benefit_remaining
         ) {
-          const totalAmount =
-            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          if (insurance.physical_therapy_97XXX === "co_pay" && i == usedVisits) {
+            if (!insurance.physical_therapy_97XXX) {
+              alert("therapy co-pay amount not found");
+              return;
+            }
+            const amount = insurance.physical_therapy_co_pay;
+            const saved = Number(mainAmount) - Number(amount);
+            if (!isNaN(saved)) {
+              return { amount, saved };
+            }
+          } else if (
+            insurance.physical_therapy_97XXX === "co_insurance" &&
+            i == usedVisits &&
+            deductableMet >= deductableLeft
+          ) {
+            if (!insurance.physical_therapy_co_insurance) {
+              alert("therapy co-insurance amount not found");
+              return;
+            }
+            const totalAmount =
+              code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+            const amount =
+              (totalAmount * insurance.physical_therapy_co_insurance) / 100;
 
-          const amount = (totalAmount * insurance.allowed_percentage) / 100;
-          const saved = Number(mainAmount) - Number(amount);
-          if (!isNaN(saved)) {
-            return { amount, saved };
+            const saved = Number(mainAmount) - Number(amount);
+            if (!isNaN(saved)) {
+              return { amount, saved };
+            }
+          } else if (
+            insurance.physical_therapy_97XXX === "covered" &&
+            i == usedVisits &&
+            deductableMet >= deductableLeft
+          ) {
+            const amount = 0;
+            const saved = Number(mainAmount) - Number(amount);
+            if (!isNaN(saved)) {
+              return { amount, saved };
+            }
           } else {
-            return { amount: 0, saved: 0 };
+            const amount =
+              code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+            const saved = Number(mainAmount) - Number(amount);
+            if (!isNaN(saved)) {
+              return { amount, saved };
+            }
           }
+
+          // const totalAmount =
+          //   code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+
+          // const amount = (totalAmount * insurance.allowed_percentage) / 100;
+          // const saved = Number(mainAmount) - Number(amount);
+          // if (!isNaN(saved)) {
+          //   return { amount, saved };
+          // } else {
+          //   return { amount: 0, saved: 0 };
+          // }
         } else {
           const amount =
             code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
@@ -894,44 +941,108 @@ const getCodeCost = (
       } else {
         return { amount: 0, saved: 0 };
       }
+
+
+
+
     } else if (itemName == "adjustment" && codeItem.visits.length > 0) {
       const code = codeList?.find((item) => item.code == codeItem.code);
       const mainAmount =
         code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
 
-      if (
-        insurance.visit_co_pay != null &&
-        insurance.visit_co_pay > 0 &&
-        i <= usedVisits
-      ) {
-        const amount = insurance.visit_co_pay;
-        const saved = Number(mainAmount) - Number(amount);
-        if (!isNaN(saved)) {
-          return { amount, saved };
-        }
-      } else if (
-        // insurance.co_insurance === "yes" &&
-        insurance.allowed_percentage &&
-        insurance.allowed_percentage >= 0 &&
-        i <= usedVisits &&
-        deductableMet >= deductableLeft
-      ) {
-        const totalAmount =
-          code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
-        const amount = (totalAmount * insurance.allowed_percentage) / 100;
-        const saved = Number(mainAmount) - Number(amount);
-        if (!isNaN(saved)) {
-          return { amount, saved };
-        }
-      } else {
-        const amount =
-          code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
 
-        const saved = Number(mainAmount) - Number(amount);
-        if (!isNaN(saved)) {
-          return { amount, saved };
+
+
+        if (insurance.chiro_benefit_989XX === "co_pay" && i <= usedVisits) {
+          if (!insurance.chiro_benefit_co_pay) {
+            alert("office visits co-pay amount not found");
+            return;
+          }
+          const amount = insurance.chiro_benefit_co_pay;
+
+          const saved = Number(mainAmount) - Number(amount);
+          if (!isNaN(saved)) {
+            return { amount, saved };
+          }
+        } else if (
+          insurance.chiro_benefit_989XX === "co_insurance" &&
+          i <= usedVisits &&
+          deductableMet >= deductableLeft
+        ) {
+          if (!insurance.chiro_benefit_co_insurance) {
+            alert("office visits co-insurance amount not found");
+            return;
+          }
+          const totalAmount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          const amount =
+            (totalAmount * insurance.chiro_benefit_co_insurance) / 100;
+
+          const saved = Number(mainAmount) - Number(amount);
+          if (!isNaN(saved)) {
+            return { amount, saved };
+          }
+        } else if (
+          insurance.office_visit_992XX === "covered" &&
+          i <= usedVisits &&
+          deductableMet >= deductableLeft
+        ) {
+          const amount = 0;
+          const saved = Number(mainAmount) - Number(amount);
+          if (!isNaN(saved)) {
+            return { amount, saved };
+          }
+        } else {
+          const amount =
+            code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+          const saved = Number(mainAmount) - Number(amount);
+          if (!isNaN(saved)) {
+            return { amount, saved };
+          }
         }
-      }
+
+
+
+
+
+
+      // if (
+      //   insurance.visit_co_pay != null &&
+      //   insurance.visit_co_pay > 0 &&
+      //   i <= usedVisits
+      // ) {
+      //   const amount = insurance.visit_co_pay;
+      //   const saved = Number(mainAmount) - Number(amount);
+      //   if (!isNaN(saved)) {
+      //     return { amount, saved };
+      //   }
+      // } else if (
+      //   // insurance.co_insurance === "yes" &&
+      //   insurance.allowed_percentage &&
+      //   insurance.allowed_percentage >= 0 &&
+      //   i <= usedVisits &&
+      //   deductableMet >= deductableLeft
+      // ) {
+      //   const totalAmount =
+      //     code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+      //   const amount = (totalAmount * insurance.allowed_percentage) / 100;
+      //   const saved = Number(mainAmount) - Number(amount);
+      //   if (!isNaN(saved)) {
+      //     return { amount, saved };
+      //   }
+      // } else {
+      //   const amount =
+      //     code?.amount[feeSchedule] || code?.amount[defaultFS] || 0;
+
+      //   const saved = Number(mainAmount) - Number(amount);
+      //   if (!isNaN(saved)) {
+      //     return { amount, saved };
+      //   }
+      // }
+
+
+
+
     }
     return { amount: 0, saved: 0 };
   });
