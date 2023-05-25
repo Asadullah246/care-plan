@@ -460,18 +460,18 @@ export const insuranceCalculation = (
     //       currentVisitSaved =
     //       adjustmentCost.saved + addonsCost.saved + examCost.saved + xrayCost.saved + therapiesCost.saved;
 
-    if (
-      insurance.amount_max_per_visit &&
-      insurance.amount_max_per_visit > 0 &&
-      insurance.visits_allowed >= i &&
-      i < 19
-    ) {
-      if (currentVisitCost > Number(insurance.amount_max_per_visit))
-        currentVisitSaved += currentVisitCost - insurance.amount_max_per_visit;
-      currentVisitCost = insurance.amount_max_per_visit;
-    }
+    // if (
+    //   insurance.amount_max_per_visit &&
+    //   insurance.amount_max_per_visit > 0 &&
+    //   insurance.visits_allowed >= i &&
+    //   i < 19
+    // ) {
+    //   if (currentVisitCost > Number(insurance.amount_max_per_visit))
+    //     currentVisitSaved += currentVisitCost - insurance.amount_max_per_visit;
+    //   currentVisitCost = insurance.amount_max_per_visit;
+    // }
 
-    calculations.deductableMet += currentVisitCost;
+    calculations.deductableMet += currentVisitCost; 
 
     calculations.userCost =
       calculations.deductableMet - deductableLeft > 0
@@ -481,7 +481,7 @@ export const insuranceCalculation = (
 
     calculations.insuranceCoverage += currentVisitSaved;
   }
-  console.log("total", calculations); 
+  console.log("total", calculations);
   const defaultFullCost = getDefaultFullCost(
     codeList,
     clientPlan.carePlan,
