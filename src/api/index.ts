@@ -559,13 +559,13 @@ export const updateCarePlanType = async (info: any, id: string) => {
   }
 };
 
-export const getCarePlanType = async (id: any) => { 
+export const getCarePlanType = async (id: any) => {
   try {
     console.log("id", id);
     const headers = {
       token: localStorage.getItem("token") || "",
     };
-    const res = await axios.get(`${base}/careplan/type/${id._id}`, {
+    const res = await axios.get(`${base}/careplan/type/${id.id}`, { 
       headers,
     });
     return res;
