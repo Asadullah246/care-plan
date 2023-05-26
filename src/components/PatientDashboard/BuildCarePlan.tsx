@@ -23,6 +23,8 @@ const BuildCarePlan = () => {
   const navigate=useNavigate()
   const storeData = store.getState();
 
+  console.log("new clientPlan app context", clientPlan);  
+
 
 
   const handleCPchange = async (e: any) => {

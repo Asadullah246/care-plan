@@ -17,10 +17,11 @@ export const CarePlan = () => {
   useEffect(() => {
     getCarePlans();
   }, []);
+  console.log("care plan", carePlanTypeList);
 
   return (
     <main>
-      <h2 className="care_plan_title1">Care Plan builder</h2> 
+      <h2 className="care_plan_title1">Care Plan builder</h2>
       <NewCarePlanTemplate load={getCarePlans} />
       {
         carePlanTypeList ? (<div className="care_list">
@@ -32,7 +33,7 @@ export const CarePlan = () => {
           {carePlanTypeList?.map((plan) => (
             <CareItem item={plan} key={plan.planName} load={getCarePlans} />
           ))}
-        </div>) : <Skeleton active />
+        </div>) : <Skeleton active /> 
       }
     </main>
   );

@@ -12,10 +12,15 @@ const SingleCodeDetails = ({ data, title }: any) => {
     catName = "XRays";
   }
   const handleVisits = (e: any, co: any) => {
+
+    // this function not calling
+
     setSelectedCode({
       ...selectedCode, [catName]: { ...selectedCode[catName], [co]: { ...selectedCode[catName][co], visits: e } }
     });
-    setClientPlan({ ...clientPlan, carePlan: { ...clientPlan.carePlan, selectedCode } })
+    // setClientPlan({ ...clientPlan, carePlan:{ ...clientPlan.carePlan, selectedCode } })
+    // setClientPlan({ ...clientPlan, carePlan:selectedCode  }) 
+
   }
   const [codeDetails, setCodeDetails] = useState<any>({});
   const gettingCodeDetails = async () => {
@@ -25,9 +30,12 @@ const SingleCodeDetails = ({ data, title }: any) => {
   useEffect(() => {
     gettingCodeDetails();
   }, []);
+  // console.log('selectd code ', selectedCode);
+
+  // console.log("client plan testing", clientPlan) ;
   return (
     <tr>
-      <SingleVisit key={data._id} code={data} item={catName} handleVisits={handleVisits} />
+      <SingleVisit key={data._id} code={data} item={catName} clientPlanChecking={"yes"} handleVisits={handleVisits} />
       <td>{codeDetails?.amount?.[feeSchedule] || codeDetails?.amount?.[defaultFS?._id]}</td>
     </tr>
   );

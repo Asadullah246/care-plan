@@ -41,6 +41,7 @@ const CodeCategory = ({ item }: any) => {
     useEffect(() => {
         firstLoad();
     }, [selectedCode]);
+    console.log("se", selectedCode, "codelist",codeList, "visible", visible); 
     return (
         <div>
             <div style={{ display: 'flex', alignItems: 'baseline' }}><h4 style={{ marginRight: '5px' }}>{item}</h4> <BsPlusCircle style={{ cursor: 'pointer' }} onClick={() => setVisible(true)} /></div>

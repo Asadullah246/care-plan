@@ -51,6 +51,7 @@ export const AppContextProvider = ({ children }: any) => {
 
   const [clientPlan, setClientPlan] = useState<any>({ insuranceVisits: 0 });
   const [gettingPatient, setGettingPatient]=useState<any>(true)
+  const [clientPlanUpdate, setClientPlanUpdate]=useState<any>(false)
 
   const gettingTemplateBuilderList = async () => {
     const res = await getTemplateList();
@@ -119,6 +120,8 @@ export const AppContextProvider = ({ children }: any) => {
     setCheckIns,
     gettingPatient,
     setGettingPatient,
+    clientPlanUpdate,
+    setClientPlanUpdate
   };
 
   const getUser = async (refresh: string) => {
@@ -164,6 +167,15 @@ export const AppContextProvider = ({ children }: any) => {
       gettingDefaultFS();
     }
   }, [user])
+
+
+
+  useEffect(() => {
+    if(clientPlan?.carePlan?.frequency){ 
+      setClientPlan({ ...clientPlan, carePlan: { ...clientPlan.carePlan, ...selectedCode } })
+      console.log("clientttttttt", clientPlan)
+    }
+}, [clientPlanUpdate])
 
 
   return <AppContext.Provider value={context}>{children}</AppContext.Provider>;
