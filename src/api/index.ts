@@ -2,7 +2,7 @@ import axios from "axios";
 import { IInsurance, IUser } from "../types";
 
 // const base = "http://localhost:3305";
-const base = 'https://careplanproject.onrender.com'; 
+const base = 'https://careplanproject.onrender.com';
 
 
 export const registerUser = async (user: IUser) => {
@@ -559,12 +559,13 @@ export const updateCarePlanType = async (info: any, id: string) => {
   }
 };
 
-export const getCarePlanType = async (id: string) => {
+export const getCarePlanType = async (id: any) => { 
   try {
+    console.log("id", id);
     const headers = {
       token: localStorage.getItem("token") || "",
     };
-    const res = await axios.get(`${base}/careplan/type/${id}`, {
+    const res = await axios.get(`${base}/careplan/type/${id._id}`, {
       headers,
     });
     return res;

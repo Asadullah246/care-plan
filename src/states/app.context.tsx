@@ -171,9 +171,9 @@ export const AppContextProvider = ({ children }: any) => {
 
 
   useEffect(() => {
-    if(clientPlan?.carePlan?.frequency){ 
+    if(clientPlan?.carePlan?.frequency){
       setClientPlan({ ...clientPlan, carePlan: { ...clientPlan.carePlan, ...selectedCode } })
-      console.log("clientttttttt", clientPlan)
+      
     }
 }, [clientPlanUpdate])
 

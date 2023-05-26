@@ -5,8 +5,10 @@ const PreviousCareItem = ({ item }: any) => {
   const [plan, setPlan] = useState<any>();
   const [cpt, setCpt] = useState<any>({});
   const gettingData = async () => {
-    const response = await getPreviousCarePlan(item);
+    const response = await getPreviousCarePlan(item); 
+    console.log("got", response);
     const res = await getCarePlanType(response?.data?.plan.carePlanType);
+    console.log("got res", res);
     setPlan(response?.data?.plan);
     setCpt(res?.data.data.plan);
   };
